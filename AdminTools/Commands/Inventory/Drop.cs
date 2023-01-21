@@ -13,7 +13,8 @@ namespace AdminTools.Commands.Inventory
 
         public override string Command => "drop";
 
-        public override string[] Aliases { get; } = { };
+        public override string[] Aliases { get; } =
+            { };
 
         public override string Description => "Drops the items in a players inventory";
 
@@ -21,7 +22,7 @@ namespace AdminTools.Commands.Inventory
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.PlayersManagement))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.PlayersManagement))
             {
                 response = "You do not have permission to use this command";
                 return false;

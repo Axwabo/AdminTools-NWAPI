@@ -2,9 +2,9 @@
 using PluginAPI.Core;
 using RemoteAdmin;
 using System;
-using System.Linq;
+using Utils.NonAllocLINQ;
 
-namespace AdminTools.Commands.Strip
+namespace AdminTools.Commands.Basic
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
@@ -25,7 +25,7 @@ namespace AdminTools.Commands.Strip
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!CommandProcessor.CheckPermissions((CommandSender)sender, "strip", PlayerPermissions.PlayersManagement, "AdminTools", false))
+            if (!CommandProcessor.CheckPermissions((CommandSender) sender, "strip", PlayerPermissions.PlayersManagement, "AdminTools", false))
             {
                 response = "You do not have permission to use this command";
                 return false;
@@ -40,8 +40,7 @@ namespace AdminTools.Commands.Strip
             switch (arguments.At(0).ToLower())
             {
                 case "*" or "all":
-                    foreach (Player p in Player.GetPlayers())
-                        p.ClearInventory();
+                    ListExtensions.ForEach(Player.GetPlayers(), Handlers.ClearInventory);
                     response = "Everyone's inventories have been cleared now";
                     return true;
                 default:

@@ -25,7 +25,7 @@ namespace AdminTools.Commands.BreakDoors
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.ForceclassWithoutRestrictions))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.ForceclassWithoutRestrictions))
             {
                 response = "You do not have permission to use this command";
                 return false;
@@ -41,7 +41,7 @@ namespace AdminTools.Commands.BreakDoors
                     "all" => HandleAll(arguments, out response),
                     _ => HandleDefault(arguments, out response)
                 };
-            
+
             response = "Usage:\nbreakdoors ((player id / name) or (all / *))" +
                 "\nbreakdoors clear" +
                 "\nbreakdoors list" +
@@ -116,7 +116,7 @@ namespace AdminTools.Commands.BreakDoors
                 return true;
             }
 
-            playerLister.Append(string.Join("\n", list.Select(p => p.Nickname)));
+            playerLister.Append(list.JoinNicknames());
             response = StringBuilderPool.Shared.ToStringReturn(playerLister);
             return true;
         }

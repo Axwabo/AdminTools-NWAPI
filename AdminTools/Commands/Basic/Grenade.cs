@@ -4,7 +4,7 @@ using PluginAPI.Core;
 using System;
 using System.Linq;
 
-namespace AdminTools.Commands.Grenade
+namespace AdminTools.Commands.Basic
 {
 
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
@@ -60,7 +60,7 @@ namespace AdminTools.Commands.Grenade
         {
             type = ItemType.None;
             fuseTime = -1f;
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.GivingItems))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.GivingItems))
             {
                 response = "You do not have permission to use this command";
                 return false;

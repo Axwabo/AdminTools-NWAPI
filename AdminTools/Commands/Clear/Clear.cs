@@ -1,7 +1,7 @@
 ﻿using CommandSystem;
 using System;
 
-namespace AdminTools.Commands.clear
+namespace AdminTools.Commands.Clear
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
@@ -11,7 +11,8 @@ namespace AdminTools.Commands.clear
 
         public override string Command => "clear";
 
-        public override string[] Aliases { get; } = { };
+        public override string[] Aliases { get; } =
+            { };
 
         public override string Description => "Clears up items and ragdolls from the server";
 
@@ -23,7 +24,7 @@ namespace AdminTools.Commands.clear
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.FacilityManagement))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.FacilityManagement))
             {
                 response = "You do not have permission to use this command";
                 return false;

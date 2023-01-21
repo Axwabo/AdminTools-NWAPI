@@ -2,7 +2,7 @@
 using PluginAPI.Core;
 using System;
 
-namespace AdminTools.Commands.Scale
+namespace AdminTools.Commands.Size
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
@@ -21,7 +21,7 @@ namespace AdminTools.Commands.Scale
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.Effects))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.Effects))
             {
                 response = "You do not have permission to use this command";
                 return false;

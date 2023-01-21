@@ -16,6 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using Utils.NonAllocLINQ;
 using Object = UnityEngine.Object;
 
 namespace AdminTools
@@ -23,8 +24,9 @@ namespace AdminTools
 
     public sealed class EventHandlers
     {
-        public static Plugin Plugin;
-        public EventHandlers(Plugin plugin) => Plugin = plugin;
+        private static Plugin _pl;
+
+        public EventHandlers(Plugin plugin) => _pl = plugin;
 
         [PluginEvent(ServerEventType.PlayerInteractDoor)]
         public void OnDoorOpen(AtPlayer player, DoorVariant door, bool canOpen)
@@ -166,17 +168,20 @@ namespace AdminTools
 
         public static IEnumerator<float> DoRocket(Player player, float speed)
         {
-            const int maxAmnt = 50;
-            int amnt = 0;
-            while (player.Role != RoleTypeId.Spectator)
+            const int maxAmount = 50;
+            int current = 0;
+            bool godMode = player.IsGodModeEnabled;
+            while (player.GameObject != null && player.Role != RoleTypeId.Spectator)
             {
                 player.Position += Vector3.up * speed;
-                amnt++;
-                if (amnt >= maxAmnt)
+                current++;
+                if (current >= maxAmount)
                 {
                     player.IsGodModeEnabled = false;
-                    Handlers.CreateThrowable(ItemType.GrenadeHE).SpawnActive(player.Position, .5f, player);
+                    Handlers.CreateThrowable(ItemType.GrenadeHE).SpawnActive(player.Position, .1f, player);
                     player.Kill("Went on a trip in their favorite rocket ship.");
+                    player.IsGodModeEnabled = godMode;
+                    yield break;
                 }
 
                 yield return Timing.WaitForOneFrame;
@@ -185,7 +190,7 @@ namespace AdminTools
 
         public static IEnumerator<float> DoJail(Player player, bool skipAdd = false)
         {
-            Dictionary<AmmoType, ushort> ammo = player.Ammo().ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            Dictionary<AmmoType, ushort> ammo = player.Ammo();
             List<ItemType> items = player.ReferenceHub.inventory.UserInventory.Items.Select(x => x.Value.ItemTypeId).ToList();
             if (!skipAdd)
             {
@@ -239,16 +244,16 @@ namespace AdminTools
         {
             try
             {
-                if (Plugin.JailedPlayers.Any(j => j.UserId == player.UserId))
+                if (Enumerable.Any(Plugin.JailedPlayers, j => j.UserId == player.UserId))
                     Timing.RunCoroutine(DoJail(player, true));
 
-                if (File.ReadAllText(Plugin.OverwatchFilePath).Contains(player.UserId))
+                if (File.ReadAllText(_pl.OverwatchFilePath).Contains(player.UserId))
                 {
                     Log.Debug($"Putting {player.UserId} into overwatch.");
                     Timing.CallDelayed(1, () => player.IsOverwatchEnabled = true);
                 }
 
-                if (File.ReadAllText(Plugin.HiddenTagsFilePath).Contains(player.UserId))
+                if (File.ReadAllText(_pl.HiddenTagsFilePath).Contains(player.UserId))
                 {
                     Log.Debug($"Hiding {player.UserId}'s tag.");
                     Timing.CallDelayed(1, () => player.SetBadgeVisibility(true));
@@ -282,38 +287,35 @@ namespace AdminTools
         {
             try
             {
-                List<string> overwatchRead = File.ReadAllLines(Plugin.OverwatchFilePath).ToList();
-                List<string> tagsRead = File.ReadAllLines(Plugin.HiddenTagsFilePath).ToList();
+                HashSet<string> overwatchRead = File.ReadAllLines(_pl.OverwatchFilePath).ToHashSet();
+                HashSet<string> tagsRead = File.ReadAllLines(_pl.HiddenTagsFilePath).ToHashSet();
 
                 foreach (Player player in Player.GetPlayers())
                 {
                     string userId = player.UserId;
-
-                    if (player.IsOverwatchEnabled && !overwatchRead.Contains(userId))
+                    if (player.IsOverwatchEnabled)
                         overwatchRead.Add(userId);
-                    else if (!player.IsOverwatchEnabled && overwatchRead.Contains(userId))
+                    else
                         overwatchRead.Remove(userId);
 
-                    if (player.IsBadgeHidden() && !tagsRead.Contains(userId))
+                    if (player.IsBadgeHidden())
                         tagsRead.Add(userId);
-                    else if (!player.IsBadgeHidden() && tagsRead.Contains(userId))
+                    else
                         tagsRead.Remove(userId);
                 }
 
-                foreach (string s in overwatchRead)
-                    Log.Debug($"{s} is in overwatch.");
-                foreach (string s in tagsRead)
-                    Log.Debug($"{s} has their tag hidden.");
-                File.WriteAllLines(Plugin.OverwatchFilePath, overwatchRead);
-                File.WriteAllLines(Plugin.HiddenTagsFilePath, tagsRead);
-
-                // Update all the jails that it is no longer the current round, so when they are unjailed they don't teleport into the void.
-                foreach (Jailed jail in Plugin.JailedPlayers.Where(jail => jail.CurrentRound))
-                    jail.CurrentRound = false;
+                Log.Debug($"The following users are in overwatch:\n{string.Join("\n", overwatchRead)}");
+                Log.Debug($"The following have their tag hidden:\n{string.Join("\n", tagsRead)}");
+                File.WriteAllLines(_pl.OverwatchFilePath, overwatchRead);
+                File.WriteAllLines(_pl.HiddenTagsFilePath, tagsRead);
             }
             catch (Exception e)
             {
-                Log.Error($"Round End: {e}");
+                Log.Error($"Round End:\n{e}");
+            } finally
+            {
+                // Update all the jails that it is no longer the current round, so when they are unjailed they don't teleport into the void.
+                ListExtensions.ForEach(Plugin.JailedPlayers, jail => jail.CurrentRound = false);
             }
 
         }

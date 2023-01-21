@@ -9,13 +9,16 @@ namespace AdminTools.Commands.Mute
     {
         public string Command => "all";
 
-        public string[] Aliases { get; } = { "*" };
+        public string[] Aliases { get; } =
+        {
+            "*"
+        };
 
         public string Description => "Mutes everyone from speaking at all in the server";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.PlayersManagement))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.PlayersManagement))
             {
                 response = "You do not have permission to use this command";
                 return false;

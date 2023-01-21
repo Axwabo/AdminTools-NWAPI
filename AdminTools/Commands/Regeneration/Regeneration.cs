@@ -3,6 +3,7 @@ using NorthwoodLib.Pools;
 using System;
 using System.Linq;
 using System.Text;
+using Utils.NonAllocLINQ;
 
 namespace AdminTools.Commands.Regeneration
 {
@@ -23,7 +24,7 @@ namespace AdminTools.Commands.Regeneration
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.PlayersManagement))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.PlayersManagement))
             {
                 response = "You do not have permission to use this command";
                 return false;
@@ -70,7 +71,7 @@ namespace AdminTools.Commands.Regeneration
                 return true;
             }
 
-            playerLister.Append(string.Join(", ", list.Select(p => p.Nickname)));
+            playerLister.Append(list.JoinNicknames());
             response = StringBuilderPool.Shared.ToStringReturn(playerLister);
             return true;
         }
@@ -118,16 +119,16 @@ namespace AdminTools.Commands.Regeneration
                 return false;
             }
 
-            AtPlayer pl = Extensions.GetPlayer(arguments.At(0));
+            AtPlayer p = Extensions.GetPlayer(arguments.At(0));
 
-            if (pl == null)
+            if (p == null)
             {
                 response = $"Player not found: {arguments.At(0)}";
                 return false;
             }
 
-            pl.RegenerationEnabled = !pl.RegenerationEnabled;
-            response = pl.RegenerationEnabled ? $"Regeneration is on for {pl.Nickname}" : $"Regeneration is off for {pl.Nickname}";
+            p.RegenerationEnabled = !p.RegenerationEnabled;
+            response = p.RegenerationEnabled ? $"Regeneration is on for {p.Nickname}" : $"Regeneration is off for {p.Nickname}";
             return true;
         }
         private static bool All(ArraySegment<string> arguments, out string response)
@@ -138,9 +139,7 @@ namespace AdminTools.Commands.Regeneration
                 return false;
             }
 
-            foreach (AtPlayer p in Extensions.Players)
-                p.RegenerationEnabled = true;
-
+            ListExtensions.ForEach(Extensions.Players, p => p.RegenerationEnabled = true);
             response = "Everyone on the server can regenerate health now";
             return true;
         }

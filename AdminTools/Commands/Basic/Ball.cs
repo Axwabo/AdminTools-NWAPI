@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AdminTools.Commands.Ball
+namespace AdminTools.Commands.Basic
 {
 
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
@@ -24,7 +24,7 @@ namespace AdminTools.Commands.Ball
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.GivingItems))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.GivingItems))
             {
                 response = "You do not have permission to use this command";
                 return false;
@@ -37,6 +37,21 @@ namespace AdminTools.Commands.Ball
             }
 
             List<Player> players = new();
+            if (!AddPlayers(arguments, out response, players))
+                return false;
+
+            response = players.Count == 1
+                ? $"{players[0].Nickname} has received a bouncing ball!"
+                : $"The balls are bouncing for {players.Count} players!";
+            if (players.Count > 1)
+                Cassie.Message("pitch_1.5 xmas_bouncyballs", true, false);
+
+            foreach (Player p in players)
+                Handlers.CreateThrowable(ItemType.SCP018).SpawnActive(p.Position, owner: p);
+            return true;
+        }
+        private static bool AddPlayers(ArraySegment<string> arguments, out string response, List<Player> players)
+        {
             switch (arguments.At(0).ToLower())
             {
                 case "*" or "all":
@@ -59,15 +74,7 @@ namespace AdminTools.Commands.Ball
                     players.Add(p);
                     break;
             }
-
-            response = players.Count == 1
-                ? $"{players[0].Nickname} has received a bouncing ball!"
-                : $"The balls are bouncing for {players.Count} players!";
-            if (players.Count > 1)
-                Cassie.Message("pitch_1.5 xmas_bouncyballs", true, false);
-
-            foreach (Player p in players)
-                Handlers.CreateThrowable(ItemType.SCP018).SpawnActive(p.Position, owner: p);
+            response = "";
             return true;
         }
     }

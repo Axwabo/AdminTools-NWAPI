@@ -11,7 +11,8 @@ namespace AdminTools.Commands.Unmute
 
         public override string Command => "punmute";
 
-        public override string[] Aliases { get; } = { };
+        public override string[] Aliases { get; } =
+            { };
 
         public override string Description => "Unmutes everyone from speaking or by intercom in the server";
 
@@ -24,7 +25,7 @@ namespace AdminTools.Commands.Unmute
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.PlayersManagement))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.PlayersManagement))
             {
                 response = "You do not have permission to use this command";
                 return false;

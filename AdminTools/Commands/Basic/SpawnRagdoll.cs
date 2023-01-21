@@ -5,7 +5,7 @@ using PluginAPI.Core;
 using System;
 using System.Linq;
 
-namespace AdminTools.Commands.SpawnRagdoll
+namespace AdminTools.Commands.Basic
 {
 
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
@@ -33,22 +33,24 @@ namespace AdminTools.Commands.SpawnRagdoll
             switch (arguments.At(0).ToLower())
             {
                 case "*" or "all":
-                    foreach (Player player in Player.GetPlayers().Where(Extensions.IsAlive))
+                    foreach (Player p in Player.GetPlayers().Where(Extensions.IsAlive))
                     {
-                        Timing.RunCoroutine(EventHandlers.SpawnBodies(player, ragdollRole, amount));
+                        Timing.RunCoroutine(EventHandlers.SpawnBodies(p, ragdollRole, amount));
                     }
 
                     break;
                 default:
-                    Player ply = int.TryParse(arguments.At(0), out int id) ? Player.GetPlayers().FirstOrDefault(x => x.PlayerId == id) : Player.GetByName(arguments.At(0));
-                    if (ply is null)
+                {
+                    Player p = Extensions.GetPlayer(arguments.At(0));
+                    if (p is null)
                     {
                         response = $"Player {arguments.At(0)} not found.";
                         return false;
                     }
 
-                    Timing.RunCoroutine(EventHandlers.SpawnBodies(ply, ragdollRole, amount));
+                    Timing.RunCoroutine(EventHandlers.SpawnBodies(p, ragdollRole, amount));
                     break;
+                }
             }
 
             response = $"{amount} {type} ragdoll(s) have been spawned on {arguments.At(0)}.";
@@ -59,7 +61,7 @@ namespace AdminTools.Commands.SpawnRagdoll
             type = RoleTypeId.None;
             amount = 0;
             ragdollRole = null;
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.RespawnEvents))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.RespawnEvents))
             {
                 response = "You do not have permission to use this command";
                 return false;

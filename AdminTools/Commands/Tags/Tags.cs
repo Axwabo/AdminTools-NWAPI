@@ -11,7 +11,8 @@ namespace AdminTools.Commands.Tags
 
         public override string Command => "tags";
 
-        public override string[] Aliases { get; } = { };
+        public override string[] Aliases { get; } =
+            { };
 
         public override string Description => "Hides or shows staff tags in the server";
 
@@ -23,7 +24,7 @@ namespace AdminTools.Commands.Tags
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.SetGroup))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.SetGroup))
             {
                 response = "You do not have permission to use this command";
                 return false;

@@ -25,7 +25,7 @@ namespace AdminTools.Commands.InstantKill
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.ForceclassWithoutRestrictions))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.ForceclassWithoutRestrictions))
             {
                 response = "You do not have permission to use this command";
                 return false;
@@ -114,7 +114,7 @@ namespace AdminTools.Commands.InstantKill
                 return true;
             }
 
-            playerLister.Append(string.Join("\n", list.Select(p => p.Nickname)));
+            playerLister.Append(list.JoinNicknames());
             response = StringBuilderPool.Shared.ToStringReturn(playerLister);
             return true;
         }

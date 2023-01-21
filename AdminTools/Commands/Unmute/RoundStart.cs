@@ -16,7 +16,7 @@ namespace AdminTools.Commands.Unmute
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.PlayersManagement))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.PlayersManagement))
             {
                 response = "You do not have permission to use this command";
                 return false;

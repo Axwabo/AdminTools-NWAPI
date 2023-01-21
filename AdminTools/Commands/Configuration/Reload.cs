@@ -8,7 +8,10 @@ namespace AdminTools.Commands.Configuration
     {
         public string Command => "reload";
 
-        public string[] Aliases { get; } = { "rld" };
+        public string[] Aliases { get; } =
+        {
+            "rld"
+        };
 
         public string Description => "Reloads all permissions and configs";
 

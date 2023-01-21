@@ -11,7 +11,10 @@ namespace AdminTools.Commands.Inventory
 
         public override string Command => "inventory";
 
-        public override string[] Aliases { get; } = { "inv" };
+        public override string[] Aliases { get; } =
+        {
+            "inv"
+        };
 
         public override string Description => "Manages player inventories";
 
@@ -23,7 +26,7 @@ namespace AdminTools.Commands.Inventory
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.PlayersManagement))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.PlayersManagement))
             {
                 response = "You do not have permission to use this command";
                 return false;

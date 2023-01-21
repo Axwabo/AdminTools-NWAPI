@@ -11,7 +11,8 @@ namespace AdminTools.Commands.Configuration
 
         public override string Command => "cfig";
 
-        public override string[] Aliases { get; } = { };
+        public override string[] Aliases { get; } =
+            { };
 
         public override string Description => "Manages reloading permissions and configs";
 

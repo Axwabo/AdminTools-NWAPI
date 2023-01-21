@@ -4,7 +4,7 @@ using RemoteAdmin;
 using System;
 using System.Linq;
 
-namespace AdminTools.Commands.AdminBroadcast
+namespace AdminTools.Commands.Basic
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
@@ -14,7 +14,10 @@ namespace AdminTools.Commands.AdminBroadcast
 
         public override string Command => "adminbroadcast";
 
-        public override string[] Aliases { get; } = { "abc" };
+        public override string[] Aliases { get; } =
+        {
+            "abc"
+        };
 
         public override string Description => "Sends a message to all currently online staff on the server";
 
@@ -22,7 +25,7 @@ namespace AdminTools.Commands.AdminBroadcast
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!CommandProcessor.CheckPermissions((CommandSender)sender, "broadcast", PlayerPermissions.Broadcasting, "AdminTools", false))
+            if (!CommandProcessor.CheckPermissions((CommandSender) sender, "broadcast", PlayerPermissions.Broadcasting, "AdminTools", false))
             {
                 response = "You do not have permission to use this command";
                 return false;
@@ -41,7 +44,7 @@ namespace AdminTools.Commands.AdminBroadcast
             }
 
             foreach (Player pl in Player.GetPlayers().Where(HasAdminChatAccess))
-                pl.SendBroadcast(EventHandlers.FormatArguments(arguments, 1) + $" ~{((CommandSender)sender).Nickname}",
+                pl.SendBroadcast(EventHandlers.FormatArguments(arguments, 1) + $" ~{((CommandSender) sender).Nickname}",
                     t, Broadcast.BroadcastFlags.AdminChat);
 
             response = "Message sent to all currently online staff";

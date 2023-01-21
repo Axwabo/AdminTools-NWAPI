@@ -1,14 +1,13 @@
 ﻿using CommandSystem;
 using PluginAPI.Core;
 using System;
-using System.Linq;
 using UnityEngine;
 
 namespace AdminTools.Commands.Size
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public class Size : ParentCommand
+    public sealed class Size : ParentCommand
     {
         public Size() => LoadGeneratedCommands();
 
@@ -23,7 +22,7 @@ namespace AdminTools.Commands.Size
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.Effects))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.Effects))
             {
                 response = "You do not have permission to use this command";
                 return false;
@@ -62,7 +61,7 @@ namespace AdminTools.Commands.Size
             if (!TryParsePositions(arguments, out response, out float x, out float y, out float z))
                 return false;
 
-            foreach (Player p in Player.GetPlayers().Where(Extensions.IsAlive))
+            foreach (Player p in Player.GetPlayers())
             {
                 EventHandlers.SetPlayerScale(p, new Vector3(x, y, z));
             }
@@ -72,7 +71,7 @@ namespace AdminTools.Commands.Size
         }
         private static bool Reset(out string response)
         {
-            foreach (Player p in Player.GetPlayers().Where(Extensions.IsAlive))
+            foreach (Player p in Player.GetPlayers())
             {
                 EventHandlers.SetPlayerScale(p, new Vector3(1, 1, 1));
             }

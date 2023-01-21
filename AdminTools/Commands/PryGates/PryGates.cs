@@ -24,7 +24,7 @@ namespace AdminTools.Commands.PryGates
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.FacilityManagement))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.FacilityManagement))
             {
                 response = "You do not have permission to use this command";
                 return false;

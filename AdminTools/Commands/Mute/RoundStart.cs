@@ -9,13 +9,16 @@ namespace AdminTools.Commands.Mute
     {
         public string Command => "roundstart";
 
-        public string[] Aliases { get; } = { "rs" };
+        public string[] Aliases { get; } =
+        {
+            "rs"
+        };
 
         public string Description => "Mutes everyone from speaking until the round starts.";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.PlayersManagement))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.PlayersManagement))
             {
                 response = "You do not have permission to use this command";
                 return false;

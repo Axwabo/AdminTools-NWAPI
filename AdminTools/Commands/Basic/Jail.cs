@@ -4,7 +4,7 @@ using PluginAPI.Core;
 using System;
 using System.Linq;
 
-namespace AdminTools.Commands.Jail
+namespace AdminTools.Commands.Basic
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
@@ -14,7 +14,8 @@ namespace AdminTools.Commands.Jail
 
         public override string Command => "jail";
 
-        public override string[] Aliases { get; } = { };
+        public override string[] Aliases { get; } =
+            { };
 
         public override string Description => "Jails or unjails a user";
 
@@ -22,7 +23,7 @@ namespace AdminTools.Commands.Jail
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.KickingAndShortTermBanning))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.KickingAndShortTermBanning))
             {
                 response = "You do not have permission to use this command";
                 return false;

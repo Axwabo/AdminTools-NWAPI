@@ -4,7 +4,7 @@ using PluginAPI.Core;
 using System;
 using System.Linq;
 
-namespace AdminTools.Commands.Kill
+namespace AdminTools.Commands.Basic
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
@@ -14,7 +14,8 @@ namespace AdminTools.Commands.Kill
 
         public override string Command => "atkill";
 
-        public override string[] Aliases { get; } = { };
+        public override string[] Aliases { get; } =
+            { };
 
         public override string Description => "Kills everyone or a user instantly";
 
@@ -22,7 +23,7 @@ namespace AdminTools.Commands.Kill
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.ForceclassToSpectator))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.ForceclassToSpectator))
             {
                 response = "You do not have permission to use this command";
                 return false;
@@ -34,11 +35,10 @@ namespace AdminTools.Commands.Kill
                 return false;
             }
 
-            switch (arguments.At(0))
+            switch (arguments.At(0).ToLower())
             {
-                case "*":
-                case "all":
-                    foreach (Player ply in Player.GetPlayers().Where(ply => ply.Role != RoleTypeId.Spectator && ply.Role != RoleTypeId.None))
+                case "*" or "all":
+                    foreach (Player ply in Player.GetPlayers().Where(Extensions.IsAlive))
                     {
                         ply.Kill("Killed by admin.");
                     }
@@ -46,7 +46,7 @@ namespace AdminTools.Commands.Kill
                     response = "Everyone has been game ended (killed) now";
                     return true;
                 default:
-                    Player pl = int.TryParse(arguments.At(0), out int id) ? Player.GetPlayers().FirstOrDefault(x => x.PlayerId == id) : Player.GetByName(arguments.At(0));
+                    Player pl = Extensions.GetPlayer(arguments.At(0));
                     if (pl == null)
                     {
                         response = $"Player not found: {arguments.At(0)}";

@@ -35,7 +35,7 @@
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="Assembly-CSharp">
-            <HintPath>..\..\assemblies\Assembly-CSharp.dll</HintPath>
+          <HintPath>..\..\assemblies\Assembly-CSharp.dll</HintPath>
         </Reference>
         <Reference Include="Assembly-CSharp-firstpass">
             <HintPath>..\..\assemblies\Assembly-CSharp-firstpass.dll</HintPath>
@@ -96,9 +96,19 @@
     <ItemGroup>
         <Compile Include="AdminToolsPlayerFactory.cs" />
         <Compile Include="AtPlayer.cs" />
-        <Compile Include="Commands\AdminBroadcast\AdminBroadcast.cs" />
-        <Compile Include="Commands\Ahp\Ahp.cs" />
-        <Compile Include="Commands\Ball\Ball.cs" />
+        <Compile Include="Commands\Basic\AdminBroadcast.cs" />
+        <Compile Include="Commands\Basic\Ahp.cs" />
+        <Compile Include="Commands\Basic\Ball.cs" />
+        <Compile Include="Commands\Basic\Enums.cs" />
+        <Compile Include="Commands\Basic\Explode.cs" />
+        <Compile Include="Commands\Basic\Grenade.cs" />
+        <Compile Include="Commands\Basic\Jail.cs" />
+        <Compile Include="Commands\Basic\Kill.cs" />
+        <Compile Include="Commands\Basic\RandomTeleport.cs" />
+        <Compile Include="Commands\Basic\Rocket.cs" />
+        <Compile Include="Commands\Basic\SpawnRagdoll.cs" />
+        <Compile Include="Commands\Basic\Strip.cs" />
+        <Compile Include="Commands\Basic\TeleportX.cs" />
         <Compile Include="Commands\BreakDoors\BreakDoors.cs" />
         <Compile Include="Commands\Clear\Clear.cs" />
         <Compile Include="Commands\Clear\Items.cs" />
@@ -108,33 +118,23 @@
         <Compile Include="Commands\DropItem\DropItem.cs" />
         <Compile Include="Commands\DropSize\DropSize.cs" />
         <Compile Include="Commands\Dummy\Dummy.cs" />
-        <Compile Include="Commands\Enums\Enums.cs" />
-        <Compile Include="Commands\Explode\Explode.cs" />
-        <Compile Include="Commands\Grenade\Grenade.cs" />
         <Compile Include="Commands\InstantKill\InstantKill.cs" />
         <Compile Include="Commands\Inventory\Drop.cs" />
         <Compile Include="Commands\Inventory\Inventory.cs" />
         <Compile Include="Commands\Inventory\See.cs" />
-        <Compile Include="Commands\Jail\Jail.cs" />
-        <Compile Include="Commands\Kill\Kill.cs" />
         <Compile Include="Commands\Mute\All.cs" />
         <Compile Include="Commands\Mute\IntercomMute.cs" />
         <Compile Include="Commands\Mute\Mute.cs" />
         <Compile Include="Commands\Mute\RoundStart.cs" />
         <Compile Include="Commands\Position\Position.cs" />
         <Compile Include="Commands\PryGates\PryGates.cs" />
-        <Compile Include="Commands\RandomTeleport\RandomTeleport.cs" />
         <Compile Include="Commands\Regeneration\Regeneration.cs" />
-        <Compile Include="Commands\Rocket\Rocket.cs" />
-        <Compile Include="Commands\Scale\Scale.cs" />
+        <Compile Include="Commands\Size\Scale.cs" />
         <Compile Include="Commands\Size\Size.cs" />
-        <Compile Include="Commands\SpawnRagdoll\SpawnRagdoll.cs" />
         <Compile Include="Commands\SpawnWorkbench\SpawnWorkbench.cs" />
-        <Compile Include="Commands\Strip\Strip.cs" />
         <Compile Include="Commands\Tags\Hide.cs" />
         <Compile Include="Commands\Tags\Show.cs" />
         <Compile Include="Commands\Tags\Tags.cs" />
-        <Compile Include="Commands\TeleportX\TeleportX.cs" />
         <Compile Include="Commands\Unmute\All.cs" />
         <Compile Include="Commands\Unmute\IntercomUnmute.cs" />
         <Compile Include="Commands\Unmute\RoundStart.cs" />

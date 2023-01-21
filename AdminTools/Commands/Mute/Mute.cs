@@ -11,7 +11,8 @@ namespace AdminTools.Commands.Mute
 
         public override string Command => "pmute";
 
-        public override string[] Aliases { get; } = { };
+        public override string[] Aliases { get; } =
+            { };
 
         public override string Description => "Mutes everyone from speaking or by intercom in the server";
 
@@ -24,7 +25,7 @@ namespace AdminTools.Commands.Mute
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.PlayersManagement))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.PlayersManagement))
             {
                 response = "You do not have permission to use this command";
                 return false;

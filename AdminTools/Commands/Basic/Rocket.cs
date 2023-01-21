@@ -1,10 +1,9 @@
 ﻿using CommandSystem;
 using MEC;
-using PlayerRoles;
 using PluginAPI.Core;
 using System;
 
-namespace AdminTools.Commands.Rocket
+namespace AdminTools.Commands.Basic
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
@@ -23,7 +22,7 @@ namespace AdminTools.Commands.Rocket
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.ForceclassWithoutRestrictions))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.ForceclassWithoutRestrictions))
             {
                 response = "You do not have permission to use this command";
                 return false;
@@ -48,7 +47,7 @@ namespace AdminTools.Commands.Rocket
                 response = $"Player not found: {arguments.At(0)}";
                 return false;
             }
-            if (p.Role is RoleTypeId.Spectator or RoleTypeId.None)
+            if (!p.IsAlive)
             {
                 response = $"Player {p.Nickname} is not a valid class to rocket";
                 return false;

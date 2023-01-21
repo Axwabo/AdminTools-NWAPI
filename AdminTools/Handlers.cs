@@ -323,7 +323,7 @@ namespace AdminTools
         public static void SpawnActive(this ThrowableItem item, Vector3 position, float fuseTime = -1f,
             Player owner = null)
         {
-            TimeGrenade grenade = (TimeGrenade)Object.Instantiate(item.Projectile, position, Quaternion.identity);
+            TimeGrenade grenade = (TimeGrenade) Object.Instantiate(item.Projectile, position, Quaternion.identity);
             if (fuseTime >= 0)
                 grenade._fuseTime = fuseTime;
             grenade.NetworkInfo = new PickupSyncInfo(item.ItemTypeId, position, Quaternion.identity, item.Weight, item.ItemSerial);

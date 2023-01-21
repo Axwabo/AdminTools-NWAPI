@@ -13,13 +13,14 @@ namespace AdminTools.Commands.Inventory
     {
         public string Command => "see";
 
-        public string[] Aliases { get; } = { };
+        public string[] Aliases { get; } =
+            { };
 
         public string Description => "Sees the inventory items a user has";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.PlayersManagement))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.PlayersManagement))
             {
                 response = "You do not have permission to use this command";
                 return false;

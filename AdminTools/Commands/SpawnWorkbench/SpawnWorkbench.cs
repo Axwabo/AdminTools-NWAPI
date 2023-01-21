@@ -17,15 +17,19 @@ namespace AdminTools.Commands.SpawnWorkbench
 
         public override string Command => "bench";
 
-        public override string[] Aliases { get; } = { "sw", "wb", "workbench" };
+        public override string[] Aliases { get; } =
+        {
+            "sw", "wb", "workbench"
+        };
 
         public override string Description => "Spawns a workbench on all users or a user";
 
         public override void LoadGeneratedCommands() { }
 
+        // TODO: refactor this thing
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.RespawnEvents))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.RespawnEvents))
             {
                 response = "You do not have permission to use this command";
                 return false;

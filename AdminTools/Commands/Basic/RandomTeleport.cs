@@ -5,7 +5,7 @@ using PluginAPI.Core;
 using System;
 using UnityEngine;
 
-namespace AdminTools.Commands.RandomTeleport
+namespace AdminTools.Commands.Basic
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
@@ -24,7 +24,7 @@ namespace AdminTools.Commands.RandomTeleport
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.PlayersManagement))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.PlayersManagement))
             {
                 response = "You do not have permission to use this command";
                 return false;
@@ -35,10 +35,9 @@ namespace AdminTools.Commands.RandomTeleport
                 response = "Usage: randomtp ((player id / name) or (all / *))";
                 return false;
             }
-            switch (arguments.At(0))
+            switch (arguments.At(0).ToLower())
             {
-                case "*":
-                case "all":
+                case "*" or "all":
                     foreach (Player p in Player.GetPlayers())
                     {
                         Teleport(p);

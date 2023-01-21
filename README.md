@@ -8,55 +8,55 @@ A port of EXILED's SCP:SL plugin made for the new offical Northwood API. Gives s
 
 Sends a message to all currently online staff on the server
 
-Permssions: **PlayerPermissions.Broadcasting**
+Permssions: **Broadcasting**
 
 ### ahp
 
 Sets a user or users Artificial HP to a specified value
 
-Permissions: **PlayerPermissions.PlayersManagement**
+Permissions: **PlayersManagement**
 
 ### ball
 
 Spawns a bouncy ball (SCP-018) on a user or all users
 
-Permissions: **PlayerPermissions.GivingItems**
+Permissions: **GivingItems**
 
 ### breakdoors (a.k.a. bd)
 
 Manage break doors properties for users
 
-Permissions: **PlayerPermissions.ForceclassWithoutRestrictions**
+Permissions: **ForceclassWithoutRestrictions**
 
 ### clear
 
 Clears up items and ragdolls from the server
 
-Permissions: **PlayerPermissions.FacilityManagement**
+Permissions: **FacilityManagement**
 
 ### cfig
 
 Manages reloading permissions and configs
 
-Permissions: **PlayerPermissions.ServerConfigs**
+Permissions: **ServerConfigs**
 
 ### dropitem (a.k.a. drop, dropi) [Work In Progress!]
 
 Drops a specified amount of a specified item on either all users or a user
 
-Permissions: **PlayerPermissions.GivingItems**
+Permissions: **GivingItems**
 
 ### dropsize (a.k.a. drops) [Work In Progress!]
 
 Same as drop item but can also modify the size of the item dropped.
 
-Permissions: **PlayerPermissions.GivingItems**
+Permissions: **GivingItems**
 
 ### dummy (a.k.a. dum) [Work In Progress!]
 
 Spawns a dummy character on all users on a user
 
-Permissions: **PlayerPermissions.RespawnEvents**
+Permissions: **RespawnEvents**
 
 ### enums (a.k.a. enum)
 
@@ -68,118 +68,118 @@ Permissions: N/A
 
 Explodes a specified user or everyone instantly
 
-Permissions: **PlayerPermissions.ForceclassToSpectator**
+Permissions: **ForceclassToSpectator**
 
 ### grenade (a.k.a. gn)
 
 Spawns a frag/flash/scp018 grenade on a user or users
 
-Permissions: **PlayerPermissions.GivingItems**
+Permissions: **GivingItems**
 
 ### instakill (a.k.a. ik)
 
 Manage instant kill properties for users
 
-Permissions: **PlayerPermissions.ForceclassWithoutRestrictions**
+Permissions: **ForceclassWithoutRestrictions**
 
 ### inventory (a.k.a. inv)
 
 Manages player inventories
 
-Permissions: **PlayerPermissions.PlayersManagement**
+Permissions: **PlayersManagement**
 
 ### jail
 
 Jails or unjails a user
 
-Permissions: **PlayerPermissions.KickingAndShortTermBanning**
+Permissions: **KickingAndShortTermBanning**
 
 ### atkill
 
 Kills everyone or a user instantly
 
-Permissions: **PlayerPermissions.ForceclassToSpectator**
+Permissions: **ForceclassToSpectator**
 
 ### pmute
 
 Mutes everyone from speaking or by intercom in the server
 
-Permissions: **PlayerPermissions.PlayersManagement**
+Permissions: **PlayersManagement**
 
 ### position (a.k.a. pos)
 
 Modifies or retrieves the position of a user or all users
 
-Permissions: **PlayerPermissions.PlayersManagement**
+Permissions: **PlayersManagement**
 
 ### prygate
 
 Gives the ability to pry gates to players, clear the ability from players, and shows who has the ability
 
-Permissions: **PlayerPermissions.FacilityManagement**
+Permissions: **FacilityManagement**
 
 ### randomtp
 
 Randomly teleports a user or all users to a random room in the facility
 
-Permissions: **PlayerPermissions.PlayersManagement**
+Permissions: **PlayersManagement**
 
 ### reg
 
 Manages regeneration properties for users
 
-Permissions: **PlayerPermissions.PlayersManagement**
+Permissions: **PlayersManagement**
 
 ### rocket
 
 Sends players high in the sky and explodes them
 
-Permissions: **PlayerPermissions.ForceclassWithoutRestrictions**
+Permissions: **ForceclassWithoutRestrictions**
 
 ### scale
 
 Scales all users or a user by a specified value
 
-Permissions: **PlayerPermissions.Effects**
+Permissions: **Effects**
 
 ### size
 
 Sets the size of all users or a user
 
-Permissions: **PlayerPermissions.Effects**
+Permissions: **Effects**
 
-### spawnragdoll (a.k.a ragdoll, rd, rag, doll) [Work In Progress!]
+### spawnragdoll (a.k.a ragdoll, rd, rag, doll)
 
 Spawns a specified number of ragdolls on a user
 
-Permissions: **PlayerPermissions.RespawnEvents**
+Permissions: **RespawnEvents**
 
 ### bench (a.k.a. sw, wb, workbench)
 
 Spawns a workbench on all users or a user
 
-Permissions: **PlayerPermissions.RespawnEvents**
+Permissions: **RespawnEvents**
 
 ### atstrip (a.k.a. stp)
 
 Clears a user or users inventories instantly
 
-Permissions: **PlayerPermissions.PlayersManagement**
+Permissions: **PlayersManagement**
 
 ### tags
 
 Hides or shows staff tags in the server
 
-Permissions: **PlayerPermissions.SetGroup**
+Permissions: **SetGroup**
 
 ### teleportx (a.k.a. tpx)
 
 Teleports all users or a user to another user
 
-Permissions: **PlayerPermissions.PlayersManagement**
+Permissions: **PlayersManagement**
 
 ### punmute
 
 Unmutes everyone from speaking or by intercom in the server
 
-Permissions: **PlayerPermissions.PlayersManagement**
+Permissions: **PlayersManagement**

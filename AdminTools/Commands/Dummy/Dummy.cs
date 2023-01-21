@@ -17,15 +17,19 @@ namespace AdminTools.Commands.Dummy
 
         public override string Command => "dummy";
 
-        public override string[] Aliases { get; } = { "dum" };
+        public override string[] Aliases { get; } =
+        {
+            "dum"
+        };
 
         public override string Description => "Spawns a dummy character on all users on a user";
 
         public override void LoadGeneratedCommands() { }
 
+        // TODO: refactor
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender)sender).CheckPermission(PlayerPermissions.RespawnEvents))
+            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.RespawnEvents))
             {
                 response = "You do not have permission to use this command";
                 return false;

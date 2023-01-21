@@ -11,7 +11,10 @@ namespace AdminTools.Commands.DropSize
 
         public override string Command => "dropsize";
 
-        public override string[] Aliases { get; } = { "drops" };
+        public override string[] Aliases { get; } =
+        {
+            "drops"
+        };
 
         public override string Description => "Drops a selected amount of a selected item on a user or all users";
 

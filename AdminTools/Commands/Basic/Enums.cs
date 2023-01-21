@@ -3,7 +3,7 @@ using NorthwoodLib.Pools;
 using System;
 using System.Text;
 
-namespace AdminTools.Commands.Enums
+namespace AdminTools.Commands.Basic
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
@@ -13,7 +13,10 @@ namespace AdminTools.Commands.Enums
 
         public override string Command => "enums";
 
-        public override string[] Aliases { get; } = { "enum" };
+        public override string[] Aliases { get; } =
+        {
+            "enum"
+        };
 
         public override string Description => "Lists all enums AdminTools uses";
 
