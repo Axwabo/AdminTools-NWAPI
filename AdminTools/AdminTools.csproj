@@ -110,13 +110,10 @@
         <Compile Include="Commands\Basic\Strip.cs" />
         <Compile Include="Commands\Basic\TeleportX.cs" />
         <Compile Include="Commands\BreakDoors\BreakDoors.cs" />
-        <Compile Include="Commands\Clear\Clear.cs" />
-        <Compile Include="Commands\Clear\Items.cs" />
-        <Compile Include="Commands\Clear\Ragdolls.cs" />
         <Compile Include="Commands\Configuration\Configuration.cs" />
         <Compile Include="Commands\Configuration\Reload.cs" />
         <Compile Include="Commands\DropItem\DropItem.cs" />
-        <Compile Include="Commands\DropSize\DropSize.cs" />
+        <Compile Include="Commands\DropItem\DropSize.cs" />
         <Compile Include="Commands\Dummy\Dummy.cs" />
         <Compile Include="Commands\InstantKill\InstantKill.cs" />
         <Compile Include="Commands\Inventory\Drop.cs" />

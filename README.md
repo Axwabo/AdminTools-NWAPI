@@ -40,13 +40,13 @@ Manages reloading permissions and configs
 
 Permissions: **ServerConfigs**
 
-### dropitem (a.k.a. drop, dropi) [Work In Progress!]
+### dropitem (a.k.a. drop, dropi)
 
 Drops a specified amount of a specified item on either all users or a user
 
 Permissions: **GivingItems**
 
-### dropsize (a.k.a. drops) [Work In Progress!]
+### dropsize (a.k.a. drops)
 
 Same as drop item but can also modify the size of the item dropped.
 

@@ -10,7 +10,7 @@ namespace AdminTools
 {
     public sealed class Plugin
     {
-        public const string Author = "Neil";
+        public const string Author = "Galaxy119, Neil, Axwabo";
         public const string Name = "Admin Tools";
         public const string Version = "8.5.4";
 
@@ -50,6 +50,7 @@ namespace AdminTools
 
             EventHandlers = new EventHandlers(this);
             EventManager.RegisterEvents(this, EventHandlers);
+            Log.Info("AdminTools has been enabled!");
         }
 
         [PluginUnload]
