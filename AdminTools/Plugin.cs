@@ -1,3 +1,4 @@
+using AdminTools.Commands;
 using PlayerStatsSystem;
 using PluginAPI.Core;
 using PluginAPI.Core.Attributes;
@@ -27,6 +28,7 @@ namespace AdminTools
         [PluginEntryPoint(Name, Version, "Tools to better support staff", Author)]
         public void Start()
         {
+            PermissionManager.InitFromConfig(Config);
             FactoryManager.RegisterPlayerFactory<AdminToolsPlayerFactory>(this);
             foreach (KeyValuePair<byte, DeathTranslation> translation in DeathTranslations.TranslationsById)
                 Handlers.UniversalDamageTypeIDs.Add(translation.Value, translation.Key);

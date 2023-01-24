@@ -116,6 +116,7 @@
         <Compile Include="Commands\DropItem\DropSize.cs" />
         <Compile Include="Commands\Dummy\Dummy.cs" />
         <Compile Include="Commands\Dummy\NullConnection.cs" />
+        <Compile Include="Commands\IDefaultPermissions.cs" />
         <Compile Include="Commands\InstantKill\InstantKill.cs" />
         <Compile Include="Commands\Inventory\Drop.cs" />
         <Compile Include="Commands\Inventory\Inventory.cs" />
@@ -124,6 +125,7 @@
         <Compile Include="Commands\Mute\IntercomMute.cs" />
         <Compile Include="Commands\Mute\Mute.cs" />
         <Compile Include="Commands\Mute\RoundStart.cs" />
+        <Compile Include="Commands\PermissionManager.cs" />
         <Compile Include="Commands\Position\Position.cs" />
         <Compile Include="Commands\PryGates\PryGates.cs" />
         <Compile Include="Commands\Regeneration\Regeneration.cs" />

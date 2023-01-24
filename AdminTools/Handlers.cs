@@ -259,7 +259,7 @@ namespace AdminTools
             _ => FirearmDamageTypeIDs.ContainsValue(id)
                 ? FirearmDamageTypeIDs.First(p => p.Value == id).Key.ToString()
                 : UniversalDamageTypeIDs.ContainsValue(id)
-                    ? UniversalDamageTypeIDs.First(p => p.Value == id).Key.ToString()
+                    ? UniversalDamageTypeIDs.First(p => p.Value == id).Key.LogLabel
                     : RoleDamageTypeIDs.ContainsValue(id)
                         ? RoleDamageTypeIDs.First(p => p.Value == id).Key.ToString()
                         : Scp096DamageTypeIDs.ContainsValue(id)
