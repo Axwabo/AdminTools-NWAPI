@@ -299,9 +299,9 @@ namespace AdminTools
         public static bool IsBadgeHidden(this Player player) =>
             !string.IsNullOrEmpty(player.ReferenceHub.serverRoles.HiddenBadge);
 
-        public static void SetBadgeVisibility(this Player player, bool state)
+        public static void SetBadgeVisibility(this Player player, bool hidden)
         {
-            if (state)
+            if (hidden)
                 player.ReferenceHub.characterClassManager.UserCode_CmdRequestHideTag();
             else
                 player.ReferenceHub.characterClassManager.UserCode_CmdRequestShowTag(false);

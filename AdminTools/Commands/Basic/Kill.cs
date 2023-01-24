@@ -7,7 +7,7 @@ namespace AdminTools.Commands.Basic
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class Kill : ParentCommand
+    public sealed class Kill : ParentCommand, IDefaultPermissions
     {
         public Kill() => LoadGeneratedCommands();
 
@@ -20,13 +20,12 @@ namespace AdminTools.Commands.Basic
 
         public override void LoadGeneratedCommands() { }
 
+        public PlayerPermissions Permissions => PlayerPermissions.ForceclassToSpectator;
+
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.ForceclassToSpectator))
-            {
-                response = "You do not have permission to use this command";
+            if (!sender.CheckPermission(this, out response))
                 return false;
-            }
 
             if (arguments.Count < 1)
             {

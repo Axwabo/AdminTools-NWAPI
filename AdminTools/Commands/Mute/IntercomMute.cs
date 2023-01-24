@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace AdminTools.Commands.Mute
 {
-    public sealed class IntercomMute : ICommand
+    public sealed class IntercomMute : ICommand, IDefaultPermissions
     {
         public string Command => "icom";
 
@@ -14,13 +14,12 @@ namespace AdminTools.Commands.Mute
 
         public string Description => "Intercom mutes everyone in the server";
 
+        public PlayerPermissions Permissions => PlayerPermissions.PlayersManagement;
+
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.PlayersManagement))
-            {
-                response = "You do not have permission to use this command";
+            if (!sender.CheckPermission(this, out response))
                 return false;
-            }
 
             if (arguments.Count < 0)
             {

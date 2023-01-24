@@ -3,12 +3,12 @@ using System.ComponentModel;
 
 namespace AdminTools
 {
-    public class Config
+    public sealed class Config
     {
         [Description("Should the tutorial class be in God Mode? Default: true")]
         public bool GodTuts { get; set; } = true;
 
-        [Description("Allows for overriding command permissions by their names.")]
+        [Description("Allows for overriding command permissions by their lowercase names.")]
         public Dictionary<string, PlayerPermissions> PermissionOverrides { get; set; } = new()
         {
             {

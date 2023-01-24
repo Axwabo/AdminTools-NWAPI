@@ -4,7 +4,7 @@ using System;
 
 namespace AdminTools.Commands.Unmute
 {
-    public sealed class IntercomUnmute : ICommand
+    public sealed class IntercomUnmute : ICommand, IDefaultPermissions
     {
         public string Command => "icom";
 
@@ -13,13 +13,12 @@ namespace AdminTools.Commands.Unmute
 
         public string Description => "Removes intercom mutes everyone in the server";
 
+        public PlayerPermissions Permissions => PlayerPermissions.PlayersManagement;
+
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.PlayersManagement))
-            {
-                response = "You do not have permission to use this command";
+            if (!sender.CheckPermission(this, out response))
                 return false;
-            }
 
             if (arguments.Count < 0)
             {

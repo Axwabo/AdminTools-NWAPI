@@ -13,7 +13,7 @@ namespace AdminTools
     {
         public const string Author = "Galaxy119, Neil, Axwabo";
         public const string Name = "Admin Tools";
-        public const string Version = "8.5.4";
+        public const string Version = "2.0.0";
 
         public EventHandlers EventHandlers;
 
@@ -23,7 +23,7 @@ namespace AdminTools
         public string HiddenTagsFilePath;
         public static readonly HashSet<string> RoundStartMutes = new();
 
-        [PluginConfig] public Config Config;
+        [PluginConfig] public Config Config = new();
 
         [PluginEntryPoint(Name, Version, "Tools to better support staff", Author)]
         public void Start()

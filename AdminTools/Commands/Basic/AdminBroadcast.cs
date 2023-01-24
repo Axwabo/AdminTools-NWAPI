@@ -1,6 +1,5 @@
 ﻿using CommandSystem;
 using PluginAPI.Core;
-using RemoteAdmin;
 using System;
 using System.Linq;
 
@@ -8,7 +7,7 @@ namespace AdminTools.Commands.Basic
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class AdminBroadcast : ParentCommand
+    public sealed class AdminBroadcast : ParentCommand, IDefaultPermissions
     {
         public AdminBroadcast() => LoadGeneratedCommands();
 
@@ -23,13 +22,12 @@ namespace AdminTools.Commands.Basic
 
         public override void LoadGeneratedCommands() { }
 
+        public PlayerPermissions Permissions => PlayerPermissions.Broadcasting;
+
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!CommandProcessor.CheckPermissions((CommandSender) sender, "broadcast", PlayerPermissions.Broadcasting, "AdminTools", false))
-            {
-                response = "You do not have permission to use this command";
+            if (!sender.CheckPermission(this, out response))
                 return false;
-            }
 
             if (arguments.Count < 2)
             {

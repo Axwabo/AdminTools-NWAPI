@@ -23,6 +23,8 @@ namespace AdminTools
 
         public readonly List<GameObject> Workbenches = new();
 
+        public bool WasInGodMode { get; set; }
+
         private float _regenTime;
 
         public override void OnUpdate()

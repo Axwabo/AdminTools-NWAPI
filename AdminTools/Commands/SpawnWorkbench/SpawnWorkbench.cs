@@ -11,7 +11,7 @@ using Object = UnityEngine.Object;
 namespace AdminTools.Commands.SpawnWorkbench
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    public sealed class SpawnWorkbench : ParentCommand
+    public sealed class SpawnWorkbench : ParentCommand, IDefaultPermissions
     {
         public SpawnWorkbench() => LoadGeneratedCommands();
 
@@ -26,13 +26,12 @@ namespace AdminTools.Commands.SpawnWorkbench
 
         public override void LoadGeneratedCommands() { }
 
+        public PlayerPermissions Permissions => PlayerPermissions.RespawnEvents;
+
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.RespawnEvents))
-            {
-                response = "You do not have permission to use this command";
+            if (!sender.CheckPermission(this, out response))
                 return false;
-            }
 
             if (sender is not PlayerCommandSender ps)
             {
@@ -96,7 +95,7 @@ namespace AdminTools.Commands.SpawnWorkbench
                 return false;
             }
 
-            GameObject bench = EventHandlers.SpawnWorkbench(player, p.Position + p.ReferenceHub.PlayerCameraReference.forward * 2, p.GameObject.transform.rotation.eulerAngles, new Vector3(x, y, z), out int index);
+            GameObject bench = EventHandlers.SpawnWorkbench(player, new Vector3(x, y, z), out int index);
             if (bench == null)
             {
                 response = "Failed to spawn workbench! Check server logs";
@@ -134,7 +133,7 @@ namespace AdminTools.Commands.SpawnWorkbench
             int index = -1;
             foreach (Player p in Player.GetPlayers().Where(Extensions.IsAlive))
             {
-                EventHandlers.SpawnWorkbench(player, p.Position + p.ReferenceHub.PlayerCameraReference.forward * 2, p.GameObject.transform.rotation.eulerAngles, new Vector3(x, y, z), out int benchIndex);
+                EventHandlers.SpawnWorkbench(player, EventHandlers.CalculateBenchPosition(p), p.GameObject.transform.rotation, new Vector3(x, y, z), out int benchIndex);
                 index = benchIndex;
             }
 

@@ -7,7 +7,7 @@ namespace AdminTools.Commands.Basic
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class TeleportX : ParentCommand
+    public sealed class TeleportX : ParentCommand, IDefaultPermissions
     {
         public TeleportX() => LoadGeneratedCommands();
 
@@ -22,13 +22,12 @@ namespace AdminTools.Commands.Basic
 
         public override void LoadGeneratedCommands() { }
 
+        public PlayerPermissions Permissions => PlayerPermissions.PlayersManagement;
+
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.PlayersManagement))
-            {
-                response = "You do not have permission to use this command";
+            if (!sender.CheckPermission(this, out response))
                 return false;
-            }
 
             if (arguments.Count >= 2)
                 return arguments.At(0) switch

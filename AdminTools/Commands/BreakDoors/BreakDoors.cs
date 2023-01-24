@@ -9,7 +9,7 @@ namespace AdminTools.Commands.BreakDoors
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class BreakDoors : ParentCommand
+    public sealed class BreakDoors : ParentCommand, IDefaultPermissions
     {
         public BreakDoors() => LoadGeneratedCommands();
 
@@ -24,13 +24,12 @@ namespace AdminTools.Commands.BreakDoors
 
         public override void LoadGeneratedCommands() { }
 
+        public PlayerPermissions Permissions => PlayerPermissions.ForceclassWithoutRestrictions;
+
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.ForceclassWithoutRestrictions))
-            {
-                response = "You do not have permission to use this command";
+            if (!sender.CheckPermission(this, out response))
                 return false;
-            }
 
             if (arguments.Count >= 1)
                 return arguments.At(0).ToLower() switch

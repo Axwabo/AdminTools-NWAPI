@@ -5,7 +5,7 @@ namespace AdminTools.Commands.Inventory
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class Inventory : ParentCommand
+    public sealed class Inventory : ParentCommand, IDefaultPermissions
     {
         public Inventory() => LoadGeneratedCommands();
 
@@ -24,13 +24,12 @@ namespace AdminTools.Commands.Inventory
             RegisterCommand(new See());
         }
 
+        public PlayerPermissions Permissions => PlayerPermissions.PlayersManagement;
+
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.PlayersManagement))
-            {
-                response = "You do not have permission to use this command";
+            if (!sender.CheckPermission(this, out response))
                 return false;
-            }
 
             response = "Invalid subcommand. Available ones: drop, see";
             return false;

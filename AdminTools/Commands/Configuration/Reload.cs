@@ -19,7 +19,7 @@ namespace AdminTools.Commands.Configuration
         {
             if (!sender.CheckPermission(PlayerPermissions.ServerConfigs))
             {
-                response = "You do not have permission to run this command.";
+                response = "You don't have permission to run this command.";
                 return false;
             }
 

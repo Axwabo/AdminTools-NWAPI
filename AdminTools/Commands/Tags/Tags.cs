@@ -5,7 +5,7 @@ namespace AdminTools.Commands.Tags
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class Tags : ParentCommand
+    public sealed class Tags : ParentCommand, IDefaultPermissions
     {
         public Tags() => LoadGeneratedCommands();
 
@@ -22,13 +22,12 @@ namespace AdminTools.Commands.Tags
             RegisterCommand(new Show());
         }
 
+        public PlayerPermissions Permissions => PlayerPermissions.SetGroup;
+
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.SetGroup))
-            {
-                response = "You do not have permission to use this command";
+            if (!sender.CheckPermission(this, out response))
                 return false;
-            }
 
             response = "Invalid subcommand. Available ones: hide, show";
             return false;

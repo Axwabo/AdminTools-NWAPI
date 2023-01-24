@@ -1,7 +1,6 @@
 ﻿using CommandSystem;
 using PlayerStatsSystem;
 using PluginAPI.Core;
-using RemoteAdmin;
 using System;
 using System.Collections.Generic;
 
@@ -10,7 +9,7 @@ namespace AdminTools.Commands.Basic
 
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class Ahp : ParentCommand
+    public sealed class Ahp : ParentCommand, IDefaultPermissions
     {
         public Ahp() => LoadGeneratedCommands();
 
@@ -23,13 +22,12 @@ namespace AdminTools.Commands.Basic
 
         public override void LoadGeneratedCommands() { }
 
+        public PlayerPermissions Permissions => PlayerPermissions.PlayersManagement;
+
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!CommandProcessor.CheckPermissions((CommandSender) sender, "ahp", PlayerPermissions.PlayersManagement, "AdminTools", false))
-            {
-                response = "You do not have permission to use this command";
+            if (!sender.CheckPermission(this, out response))
                 return false;
-            }
 
             if (arguments.Count < 2)
             {
@@ -63,19 +61,18 @@ namespace AdminTools.Commands.Basic
         {
             switch (arguments.At(0).ToLower())
             {
-                case "*":
-                case "all":
+                case "*" or "all":
                     players.AddRange(Player.GetPlayers());
                     break;
                 default:
-                    Player player = Extensions.GetPlayer(arguments.At(0));
-                    if (player == null)
+                    Player p = Extensions.GetPlayer(arguments.At(0));
+                    if (p == null)
                     {
                         response = $"Player not found: {arguments.At(0)}";
                         return false;
                     }
 
-                    players.Add(player);
+                    players.Add(p);
                     break;
             }
             response = "";

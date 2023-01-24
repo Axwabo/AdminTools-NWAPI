@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace AdminTools.Commands.Mute
 {
-    public sealed class RoundStart : ICommand
+    public sealed class RoundStart : ICommand, IDefaultPermissions
     {
         public string Command => "roundstart";
 
@@ -16,13 +16,12 @@ namespace AdminTools.Commands.Mute
 
         public string Description => "Mutes everyone from speaking until the round starts.";
 
+        public PlayerPermissions Permissions => PlayerPermissions.PlayersManagement;
+
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.PlayersManagement))
-            {
-                response = "You do not have permission to use this command";
+            if (!sender.CheckPermission(this, out response))
                 return false;
-            }
 
             if (arguments.Count < 0)
             {

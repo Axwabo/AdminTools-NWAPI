@@ -11,7 +11,7 @@ namespace AdminTools.Commands.Position
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class Position : ParentCommand
+    public sealed class Position : ParentCommand, IDefaultPermissions
     {
         public Position() => LoadGeneratedCommands();
 
@@ -27,13 +27,12 @@ namespace AdminTools.Commands.Position
         public override void LoadGeneratedCommands() { }
 
         // TODO: refactor this bad boy
+        public PlayerPermissions Permissions => PlayerPermissions.PlayersManagement;
+
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.PlayersManagement))
-            {
-                response = "You do not have permission to use this command";
+            if (!sender.CheckPermission(this, out response))
                 return false;
-            }
 
             if (arguments.Count < 2)
             {

@@ -99,31 +99,45 @@ namespace AdminTools
                 player.Unmute(true);
         }
 
-        public static GameObject SpawnWorkbench(AtPlayer p, Vector3 position, Vector3 rotation, Vector3 size, out int benchIndex)
+        [PluginEvent(ServerEventType.PlayerChangeRole)]
+        public void OnRoleChange(AtPlayer player, PlayerRoleBase oldRole, RoleTypeId newRole, RoleChangeReason reason)
+        {
+            if (!_pl.Config.GodTuts)
+                return;
+            if (newRole == RoleTypeId.Tutorial)
+            {
+                player.WasInGodMode = player.IsGodModeEnabled;
+                player.IsGodModeEnabled = true;
+            }
+            else
+                player.IsGodModeEnabled = player.WasInGodMode;
+        }
+
+        public static GameObject SpawnWorkbench(AtPlayer p, Vector3 size, out int benchIndex)
+        {
+            Vector3 position = CalculateBenchPosition(p);
+            Vector3 rotation = p.GameObject.transform.rotation.eulerAngles;
+            rotation.x += 180;
+            rotation.z += 180;
+            return SpawnWorkbench(p, position, Quaternion.Euler(rotation), size, out benchIndex);
+        }
+
+        public static Vector3 CalculateBenchPosition(Player p) => p.Position + p.ReferenceHub.PlayerCameraReference.forward * 2 + Vector3.down * 0.5f;
+
+        public static GameObject SpawnWorkbench(AtPlayer p, Vector3 position, Quaternion rotation, Vector3 size, out int benchIndex)
         {
             try
             {
                 Log.Debug("Spawning workbench");
                 benchIndex = 0;
-                GameObject bench = Object.Instantiate(NetworkClient.prefabs.Values.FirstOrDefault(o => o.TryGetComponent(out WorkstationController _)));
-                rotation.x += 180;
-                rotation.z += 180;
-                Offset offset = new()
-                {
-                    position = position,
-                    rotation = rotation,
-                    scale = Vector3.one
-                };
-                bench.gameObject.transform.localScale = size;
+                GameObject bench = Object.Instantiate(WorkstationPrefab, position, rotation);
+                bench.transform.localScale = size;
                 NetworkServer.Spawn(bench);
                 List<GameObject> list = p.Workbenches;
                 list.Add(bench);
                 benchIndex = list.Count;
                 if (benchIndex != 1)
                     benchIndex = list.Count;
-                Transform t = bench.transform;
-                t.localPosition = offset.position;
-                t.localRotation = Quaternion.Euler(offset.rotation);
                 if (!bench.TryGetComponent(out WorkstationController _))
                     bench.AddComponent<WorkstationController>();
                 return bench;
@@ -135,6 +149,8 @@ namespace AdminTools
                 return null;
             }
         }
+
+        public static GameObject WorkstationPrefab => NetworkClient.prefabs.Values.FirstOrDefault(o => o.TryGetComponent(out WorkstationController _));
 
         public static void SetPlayerScale(Player target, Vector3 scale)
         {
@@ -289,6 +305,7 @@ namespace AdminTools
         [PluginEvent(ServerEventType.RoundEnd)]
         public void OnRoundEnd(RoundSummary.LeadingTeam leadingTeam)
         {
+            ListExtensions.ForEach(Extensions.Players, p => p.WasInGodMode = false);
             try
             {
                 HashSet<string> overwatchRead = File.ReadAllLines(_pl.OverwatchFilePath).ToHashSet();

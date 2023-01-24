@@ -10,7 +10,7 @@ namespace AdminTools.Commands.Basic
 
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class SpawnRagdoll : ParentCommand
+    public sealed class SpawnRagdoll : ParentCommand, IDefaultPermissions
     {
         public SpawnRagdoll() => LoadGeneratedCommands();
 
@@ -25,9 +25,11 @@ namespace AdminTools.Commands.Basic
 
         public override void LoadGeneratedCommands() { }
 
+        public PlayerPermissions Permissions => PlayerPermissions.RespawnEvents;
+
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!ValidateArguments(arguments, sender, out response, out RoleTypeId type, out int amount, out IRagdollRole ragdollRole))
+            if (!ValidateArguments(this, arguments, sender, out response, out RoleTypeId type, out int amount, out IRagdollRole ragdollRole))
                 return false;
 
             switch (arguments.At(0).ToLower())
@@ -56,16 +58,13 @@ namespace AdminTools.Commands.Basic
             response = $"{amount} {type} ragdoll(s) have been spawned on {arguments.At(0)}.";
             return true;
         }
-        private static bool ValidateArguments(ArraySegment<string> arguments, ICommandSender sender, out string response, out RoleTypeId type, out int amount, out IRagdollRole ragdollRole)
+        private static bool ValidateArguments(ICommand command, ArraySegment<string> arguments, ICommandSender sender, out string response, out RoleTypeId type, out int amount, out IRagdollRole ragdollRole)
         {
             type = RoleTypeId.None;
             amount = 0;
             ragdollRole = null;
-            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.RespawnEvents))
-            {
-                response = "You do not have permission to use this command";
+            if (!sender.CheckPermission(command, out response))
                 return false;
-            }
 
             if (arguments.Count < 3)
             {

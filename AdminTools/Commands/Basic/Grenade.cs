@@ -1,5 +1,4 @@
 ﻿using CommandSystem;
-using PlayerRoles;
 using PluginAPI.Core;
 using System;
 using System.Linq;
@@ -9,7 +8,7 @@ namespace AdminTools.Commands.Basic
 
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class Grenade : ParentCommand
+    public sealed class Grenade : ParentCommand, IDefaultPermissions
     {
         public Grenade() => LoadGeneratedCommands();
 
@@ -24,26 +23,27 @@ namespace AdminTools.Commands.Basic
 
         public override void LoadGeneratedCommands() { }
 
+        public PlayerPermissions Permissions => PlayerPermissions.GivingItems;
+
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!ValidateArguments(arguments, sender, out response, out ItemType type, out float fuseTime))
+            if (!ValidateArguments(this, arguments, sender, out response, out ItemType type, out float fuseTime))
                 return false;
 
-            switch (arguments.At(0))
+            switch (arguments.At(0).ToLower())
             {
-                case "*":
-                case "all":
+                case "*" or "all":
                     if (type == ItemType.SCP018)
                         Cassie.Message("pitch_1.5 xmas_bouncyballs", true, false);
 
-                    foreach (Player p in Player.GetPlayers().Where(player => player.Role != RoleTypeId.Spectator))
+                    foreach (Player p in Player.GetPlayers().Where(Extensions.IsAlive))
                         Handlers.CreateThrowable(type).SpawnActive(p.Position, fuseTime);
 
                     response = "Grenade has been sent to everyone";
                     return true;
                 default:
                 {
-                    Player p = int.TryParse(arguments.At(0), out int id) ? Player.GetPlayers().FirstOrDefault(x => x.PlayerId == id) : Player.GetByName(arguments.At(0));
+                    Player p = Extensions.GetPlayer(arguments.At(0));
                     if (p is null)
                     {
                         response = $"Player {arguments.At(0)} not found.";
@@ -56,15 +56,12 @@ namespace AdminTools.Commands.Basic
                 }
             }
         }
-        private static bool ValidateArguments(ArraySegment<string> arguments, ICommandSender sender, out string response, out ItemType type, out float fuseTime)
+        private static bool ValidateArguments(ICommand command, ArraySegment<string> arguments, ICommandSender sender, out string response, out ItemType type, out float fuseTime)
         {
             type = ItemType.None;
             fuseTime = -1f;
-            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.GivingItems))
-            {
-                response = "You do not have permission to use this command";
+            if (!sender.CheckPermission(command, out response))
                 return false;
-            }
 
             if (arguments.Count < 2)
             {

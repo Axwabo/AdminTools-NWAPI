@@ -9,7 +9,7 @@ using System.Text;
 namespace AdminTools.Commands.Inventory
 {
 
-    public sealed class See : ICommand
+    public sealed class See : ICommand, IDefaultPermissions
     {
         public string Command => "see";
 
@@ -18,13 +18,12 @@ namespace AdminTools.Commands.Inventory
 
         public string Description => "Sees the inventory items a user has";
 
+        public PlayerPermissions Permissions => PlayerPermissions.PlayersManagement;
+
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.PlayersManagement))
-            {
-                response = "You do not have permission to use this command";
+            if (!sender.CheckPermission(this, out response))
                 return false;
-            }
 
             if (arguments.Count < 1)
             {

@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace AdminTools.Commands.Tags
 {
-    public sealed class Show : ICommand
+    public sealed class Show : ICommand, IDefaultPermissions
     {
         public string Command => "show";
 
@@ -14,13 +14,12 @@ namespace AdminTools.Commands.Tags
 
         public string Description => "Shows staff tags on the server";
 
+        public PlayerPermissions Permissions => PlayerPermissions.SetGroup;
+
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.SetGroup))
-            {
-                response = "You do not have permission to use this command";
+            if (!sender.CheckPermission(this, out response))
                 return false;
-            }
 
             if (arguments.Count < 0)
             {
@@ -28,11 +27,12 @@ namespace AdminTools.Commands.Tags
                 return false;
             }
 
-            foreach (Player player in Player.GetPlayers().Where(player => player.ReferenceHub.serverRoles.RemoteAdmin && !player.ReferenceHub.serverRoles.RaEverywhere && player.IsBadgeHidden()))
-                player.SetBadgeVisibility(false);
+            foreach (Player p in Player.GetPlayers().Where(HasHiddenBadge))
+                p.SetBadgeVisibility(false);
 
             response = "All staff tags are now visible";
             return true;
         }
+        private static bool HasHiddenBadge(Player player) => player.ReferenceHub.serverRoles.RemoteAdmin && !player.ReferenceHub.serverRoles.RaEverywhere && player.IsBadgeHidden();
     }
 }

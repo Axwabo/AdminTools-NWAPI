@@ -12,7 +12,7 @@ using Object = UnityEngine.Object;
 namespace AdminTools.Commands.Dummy
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    public sealed class Dummy : ParentCommand
+    public sealed class Dummy : ParentCommand, IDefaultPermissions
     {
         public Dummy() => LoadGeneratedCommands();
 
@@ -27,13 +27,12 @@ namespace AdminTools.Commands.Dummy
 
         public override void LoadGeneratedCommands() { }
 
+        public PlayerPermissions Permissions => PlayerPermissions.RespawnEvents;
+
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.RespawnEvents))
-            {
-                response = "You do not have permission to use this command";
+            if (!sender.CheckPermission(this, out response))
                 return false;
-            }
 
             if (sender is not PlayerCommandSender ps)
             {

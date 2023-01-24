@@ -1,6 +1,5 @@
 ﻿using CommandSystem;
 using PluginAPI.Core;
-using RemoteAdmin;
 using System;
 using Utils.NonAllocLINQ;
 
@@ -8,7 +7,7 @@ namespace AdminTools.Commands.Basic
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class Strip : ParentCommand
+    public sealed class Strip : ParentCommand, IDefaultPermissions
     {
         public Strip() => LoadGeneratedCommands();
 
@@ -23,13 +22,12 @@ namespace AdminTools.Commands.Basic
 
         public override void LoadGeneratedCommands() { }
 
+        public PlayerPermissions Permissions => PlayerPermissions.PlayersManagement;
+
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!CommandProcessor.CheckPermissions((CommandSender) sender, "strip", PlayerPermissions.PlayersManagement, "AdminTools", false))
-            {
-                response = "You do not have permission to use this command";
+            if (!sender.CheckPermission(this, out response))
                 return false;
-            }
 
             if (arguments.Count < 1)
             {

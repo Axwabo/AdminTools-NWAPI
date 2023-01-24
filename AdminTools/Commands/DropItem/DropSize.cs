@@ -12,7 +12,7 @@ namespace AdminTools.Commands.DropItem
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class DropSize : ParentCommand
+    public sealed class DropSize : ParentCommand, IDefaultPermissions
     {
         public DropSize() => LoadGeneratedCommands();
 
@@ -27,13 +27,12 @@ namespace AdminTools.Commands.DropItem
 
         public override void LoadGeneratedCommands() { }
 
+        public PlayerPermissions Permissions => PlayerPermissions.GivingItems;
+
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.GivingItems))
-            {
-                response = "You do not have permission to use this command";
+            if (!sender.CheckPermission(this, out response))
                 return false;
-            }
 
             if (arguments.Count < 3)
             {

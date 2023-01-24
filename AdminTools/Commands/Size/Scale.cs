@@ -6,7 +6,7 @@ namespace AdminTools.Commands.Size
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class Scale : ParentCommand
+    public sealed class Scale : ParentCommand, IDefaultPermissions
     {
         public Scale() => LoadGeneratedCommands();
 
@@ -19,13 +19,12 @@ namespace AdminTools.Commands.Size
 
         public override void LoadGeneratedCommands() { }
 
+        public PlayerPermissions Permissions => PlayerPermissions.Effects;
+
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!((CommandSender) sender).CheckPermission(PlayerPermissions.Effects))
-            {
-                response = "You do not have permission to use this command";
+            if (!sender.CheckPermission(this, out response))
                 return false;
-            }
 
             if (arguments.Count >= 1)
                 return arguments.At(0) switch

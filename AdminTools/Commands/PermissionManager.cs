@@ -25,7 +25,7 @@ namespace AdminTools.Commands
                     return true;
                 }
 
-                response = $"You do not have permission to use this command. Required: {perm}";
+                response = $"You don't have permission ({perm}) to use this command.";
                 return false;
             }
             if (command is IDefaultPermissions def)
@@ -36,7 +36,7 @@ namespace AdminTools.Commands
                     return true;
                 }
 
-                response = $"You do not have permission to use this command. Required: {def.Permissions}";
+                response = $"You don't have permission ({def.Permissions}) to use this command.";
                 return false;
             }
             response = "";

@@ -2,7 +2,15 @@
 
 A port of EXILED's SCP:SL plugin made for the new offical Northwood API. Gives server owners more useful commands.
 
+# Installation
+
+1. Download the `AdminTools.dll` from the [latest release](https://github.com/Axwabo/AdminTools-NWAPI/releases/latest)
+2. Put the DLL in your `plugins` folder (windows: `%appdata%/SCP Secret Laboratory/PluginAPI/plugins/<port>/`)
+3. Restart your server
+
 ## Commands and Descriptions
+
+You can override command permissions from the config. The default ones are listed here.
 
 ### adminbroadcast (a.k.a. abc)
 
