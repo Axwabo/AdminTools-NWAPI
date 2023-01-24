@@ -30,7 +30,7 @@ namespace AdminTools.Commands.Size
             if (arguments.Count >= 1)
                 return arguments.At(0) switch
                 {
-                    "reset" => Reset(arguments, out response),
+                    "reset" => Reset(out response),
                     "*" or "all" => All(arguments, out response),
                     _ => HandleDefault(arguments, out response)
                 };
@@ -84,13 +84,8 @@ namespace AdminTools.Commands.Size
             response = $"Everyone's scale has been set to {value}";
             return true;
         }
-        private static bool Reset(ArraySegment<string> arguments, out string response)
+        private static bool Reset(out string response)
         {
-            if (arguments.Count < 1)
-            {
-                response = "Usage: scale reset";
-                return false;
-            }
             foreach (Player p in Player.GetPlayers())
                 EventHandlers.SetPlayerScale(p, 1);
 

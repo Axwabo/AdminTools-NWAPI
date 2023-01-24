@@ -32,7 +32,7 @@ namespace AdminTools.Commands.Basic
 
             if (arguments.Count < 1)
             {
-                response = "Usage: ball ((player id/ name) or (all / *))";
+                response = "Usage: ball ((player id / name) or (all / *))";
                 return false;
             }
 

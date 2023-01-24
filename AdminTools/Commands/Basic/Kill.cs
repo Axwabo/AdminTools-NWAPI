@@ -1,5 +1,4 @@
 ﻿using CommandSystem;
-using PlayerRoles;
 using PluginAPI.Core;
 using System;
 using System.Linq;
@@ -38,30 +37,34 @@ namespace AdminTools.Commands.Basic
             switch (arguments.At(0).ToLower())
             {
                 case "*" or "all":
-                    foreach (Player ply in Player.GetPlayers().Where(Extensions.IsAlive))
+                {
+                    foreach (Player p in Player.GetPlayers().Where(Extensions.IsAlive))
                     {
-                        ply.Kill("Killed by admin.");
+                        p.Kill("Killed by admin.");
                     }
 
                     response = "Everyone has been game ended (killed) now";
                     return true;
+                }
                 default:
-                    Player pl = Extensions.GetPlayer(arguments.At(0));
-                    if (pl == null)
+                {
+                    Player p = Extensions.GetPlayer(arguments.At(0));
+                    if (p == null)
                     {
                         response = $"Player not found: {arguments.At(0)}";
                         return false;
                     }
 
-                    if (pl.Role is RoleTypeId.Spectator or RoleTypeId.None)
+                    if (!p.IsAlive)
                     {
-                        response = $"Player {pl.Nickname} is not a valid class to kill";
+                        response = $"Player {p.Nickname} is not a valid class to kill";
                         return false;
                     }
 
-                    pl.Kill("Killed by admin.");
-                    response = $"Player {pl.Nickname} has been game ended (killed) now";
+                    p.Kill("Killed by admin.");
+                    response = $"Player {p.Nickname} has been game ended (killed) now";
                     return true;
+                }
             }
         }
     }

@@ -34,10 +34,10 @@ namespace AdminTools.Commands.Regeneration
                 return arguments.At(0).ToLower() switch
                 {
                     "clear" => Clear(out response),
-                    "list" => List(arguments, out response),
+                    "list" => List(out response),
                     "heal" => Heal(arguments, out response),
                     "time" => Time(arguments, out response),
-                    "*" or "all" => All(arguments, out response),
+                    "*" or "all" => All(out response),
                     _ => HandleDefault(arguments, out response)
                 };
             response = "Usage:\nreg ((player id / name) or (all / *)) ((doors) or (all))" +
@@ -56,13 +56,8 @@ namespace AdminTools.Commands.Regeneration
             response = "Regeneration has been removed from everyone";
             return true;
         }
-        private static bool List(ArraySegment<string> arguments, out string response)
+        private static bool List(out string response)
         {
-            if (arguments.Count < 1)
-            {
-                response = "Usage: regen list";
-                return false;
-            }
             AtPlayer[] list = Extensions.Players.Where(p => p.RegenerationEnabled).ToArray();
             StringBuilder playerLister = StringBuilderPool.Shared.Rent(list.Length != 0 ? "Players with regeneration on:\n" : "No players currently online have regeneration on");
             if (list.Length == 0)
@@ -131,14 +126,8 @@ namespace AdminTools.Commands.Regeneration
             response = p.RegenerationEnabled ? $"Regeneration is on for {p.Nickname}" : $"Regeneration is off for {p.Nickname}";
             return true;
         }
-        private static bool All(ArraySegment<string> arguments, out string response)
+        private static bool All(out string response)
         {
-            if (arguments.Count < 1)
-            {
-                response = "Usage: reg (all / *)";
-                return false;
-            }
-
             ListExtensions.ForEach(Extensions.Players, p => p.RegenerationEnabled = true);
             response = "Everyone on the server can regenerate health now";
             return true;

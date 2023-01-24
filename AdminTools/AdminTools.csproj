@@ -115,6 +115,7 @@
         <Compile Include="Commands\DropItem\DropItem.cs" />
         <Compile Include="Commands\DropItem\DropSize.cs" />
         <Compile Include="Commands\Dummy\Dummy.cs" />
+        <Compile Include="Commands\Dummy\NullConnection.cs" />
         <Compile Include="Commands\InstantKill\InstantKill.cs" />
         <Compile Include="Commands\Inventory\Drop.cs" />
         <Compile Include="Commands\Inventory\Inventory.cs" />

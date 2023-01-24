@@ -1,7 +1,7 @@
 ﻿using CommandSystem;
 using PluginAPI.Core;
 using System;
-using System.Linq;
+using Utils.NonAllocLINQ;
 
 namespace AdminTools.Commands.Basic
 {
@@ -34,26 +34,16 @@ namespace AdminTools.Commands.Basic
             if (arguments.Count >= 1)
                 return arguments.At(0) switch
                 {
-                    "*" or "all" => All(arguments, out response),
+                    "*" or "all" => All(out response),
                     _ => HandleDefault(arguments, out response)
                 };
             response = "Usage: expl ((player id / name) or (all / *))";
             return false;
 
         }
-        private static bool All(ArraySegment<string> arguments, out string response)
+        private static bool All(out string response)
         {
-            if (arguments.Count < 1)
-            {
-                response = "Usage: expl (all / *)";
-                return false;
-            }
-
-            foreach (Player p in Player.GetPlayers().Where(Extensions.IsAlive))
-            {
-                p.Kill("Exploded by admin.");
-                Handlers.CreateThrowable(ItemType.GrenadeHE).SpawnActive(p.Position, .5f, p);
-            }
+            ListExtensions.ForEach(Player.GetPlayers(), DoExplosion);
             response = "Everyone exploded, Hubert cannot believe you have done this";
             return true;
         }
@@ -82,6 +72,13 @@ namespace AdminTools.Commands.Basic
             Handlers.CreateThrowable(ItemType.GrenadeHE).SpawnActive(p.Position, .1f, p);
             response = $"Player \"{p.Nickname}\" game ended (exploded)";
             return true;
+        }
+        private static void DoExplosion(Player p)
+        {
+            if (!p.IsAlive)
+                return;
+            p.Kill("Exploded by admin.");
+            Handlers.CreateThrowable(ItemType.GrenadeHE).SpawnActive(p.Position, .5f, p);
         }
     }
 }

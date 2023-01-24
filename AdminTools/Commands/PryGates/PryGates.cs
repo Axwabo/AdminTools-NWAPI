@@ -33,11 +33,11 @@ namespace AdminTools.Commands.PryGates
             if (arguments.Count >= 1)
                 return arguments.At(0).ToLower() switch
                 {
-                    "clear" => Clear(arguments, out response),
-                    "list" => List(arguments, out response),
+                    "clear" => Clear(out response),
+                    "list" => List(out response),
                     "remove" => Remove(arguments, out response),
-                    "*" or "all" => All(arguments, out response),
-                    _ => FallbackCase(arguments, out response)
+                    "*" or "all" => All(out response),
+                    _ => HandleDefault(arguments, out response)
                 };
 
             response = "Usage:\nprygate ((player id / name) or (all / *))" +
@@ -47,7 +47,7 @@ namespace AdminTools.Commands.PryGates
             return false;
 
         }
-        private static bool FallbackCase(ArraySegment<string> arguments, out string response)
+        private static bool HandleDefault(ArraySegment<string> arguments, out string response)
         {
             if (arguments.Count < 1)
             {
@@ -73,14 +73,8 @@ namespace AdminTools.Commands.PryGates
             response = $"Player \"{p.Nickname}\" cannot pry gates open now";
             return true;
         }
-        private static bool All(ArraySegment<string> arguments, out string response)
+        private static bool All(out string response)
         {
-            if (arguments.Count < 1)
-            {
-                response = "Usage: prygates (all / *)";
-                return false;
-            }
-
             ListExtensions.ForEach(Extensions.Players, p => p.PryGateEnabled = true);
             response = "The ability to pry gates open is on for all players now";
             return true;
@@ -109,14 +103,8 @@ namespace AdminTools.Commands.PryGates
                 response = $"Player {p.Nickname} does not have the ability to pry gates open";
             return true;
         }
-        private static bool List(ArraySegment<string> arguments, out string response)
+        private static bool List(out string response)
         {
-            if (arguments.Count < 1)
-            {
-                response = "Usage: prygates list";
-                return false;
-            }
-
             AtPlayer[] active = Extensions.Players.Where(p => p.PryGateEnabled).ToArray();
 
             StringBuilder playerLister = StringBuilderPool.Shared.Rent(active.Length != 0 ? "Players with the ability to pry gates:\n" : "No players currently online have the ability to pry gates");
@@ -134,14 +122,8 @@ namespace AdminTools.Commands.PryGates
             StringBuilderPool.Shared.Return(playerLister);
             return true;
         }
-        private static bool Clear(ArraySegment<string> arguments, out string response)
+        private static bool Clear(out string response)
         {
-            if (arguments.Count < 1)
-            {
-                response = "Usage: prygates clear";
-                return false;
-            }
-
             ListExtensions.ForEach(Extensions.Players, p => p.PryGateEnabled = false);
             response = "The ability to pry gates is cleared from all players now";
             return true;

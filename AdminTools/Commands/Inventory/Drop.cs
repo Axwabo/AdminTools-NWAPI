@@ -1,7 +1,6 @@
 ﻿using CommandSystem;
 using PluginAPI.Core;
 using System;
-using System.Linq;
 
 namespace AdminTools.Commands.Inventory
 {
@@ -34,26 +33,29 @@ namespace AdminTools.Commands.Inventory
                 return false;
             }
 
-            switch (arguments.At(0))
+            switch (arguments.At(0).ToLower())
             {
-                case "*":
-                case "all":
-                    foreach (Player ply in Player.GetPlayers())
-                        ply.DropEverything();
+                case "*" or "all":
+                {
+                    foreach (Player p in Player.GetPlayers())
+                        p.DropEverything();
 
                     response = "All items from everyones inventories has been dropped";
                     return true;
+                }
                 default:
-                    Player pl = int.TryParse(arguments.At(0), out int id) ? Player.GetPlayers().FirstOrDefault(x => x.PlayerId == id) : Player.GetByName(arguments.At(0));
-                    if (pl == null)
+                {
+                    Player p = Extensions.GetPlayer(arguments.At(0));
+                    if (p == null)
                     {
                         response = $"Player not found: {arguments.At(0)}";
                         return false;
                     }
 
-                    pl.DropEverything();
-                    response = $"All items from {pl.Nickname}'s inventory has been dropped";
+                    p.DropEverything();
+                    response = $"All items from {p.Nickname}'s inventory has been dropped";
                     return true;
+                }
             }
         }
     }

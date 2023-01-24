@@ -28,12 +28,6 @@ Manage break doors properties for users
 
 Permissions: **ForceclassWithoutRestrictions**
 
-### clear
-
-Clears up items and ragdolls from the server
-
-Permissions: **FacilityManagement**
-
 ### cfig
 
 Manages reloading permissions and configs

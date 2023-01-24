@@ -3,6 +3,7 @@ using NorthwoodLib.Pools;
 using System;
 using System.Linq;
 using System.Text;
+using Utils.NonAllocLINQ;
 
 namespace AdminTools.Commands.InstantKill
 {
@@ -34,10 +35,10 @@ namespace AdminTools.Commands.InstantKill
             if (arguments.Count >= 1)
                 return arguments.At(0).ToLower() switch
                 {
-                    "clear" => Clear(arguments, out response),
+                    "clear" => Clear(out response),
                     "list" => List(out response),
                     "remove" => Remove(arguments, out response),
-                    "*" or "all" => All(arguments, out response),
+                    "*" or "all" => All(out response),
                     _ => HandleDefault(arguments, out response)
                 };
             response = "Usage:\ninstakill ((player id / name) or (all / *))" +
@@ -66,17 +67,9 @@ namespace AdminTools.Commands.InstantKill
             response = $"Instant killing is now {(p.InstantKillEnabled ? "on" : "off")} for {p.Nickname}";
             return true;
         }
-        private static bool All(ArraySegment<string> arguments, out string response)
+        private static bool All(out string response)
         {
-            if (arguments.Count < 1)
-            {
-                response = "Usage: instakill all / *";
-                return false;
-            }
-
-            foreach (AtPlayer ply in Extensions.Players.Where(ply => !ply.InstantKillEnabled))
-                ply.InstantKillEnabled = true;
-
+            ListExtensions.ForEach(Extensions.Players, p => p.InstantKillEnabled = true);
             response = "Everyone on the server can instantly kill other users now";
             return true;
         }
@@ -118,17 +111,9 @@ namespace AdminTools.Commands.InstantKill
             response = StringBuilderPool.Shared.ToStringReturn(playerLister);
             return true;
         }
-        private static bool Clear(ArraySegment<string> arguments, out string response)
+        private static bool Clear(out string response)
         {
-            if (arguments.Count < 1)
-            {
-                response = "Usage: instakill clear";
-                return false;
-            }
-
-            foreach (AtPlayer ply in Extensions.Players)
-                ply.InstantKillEnabled = false;
-
+            ListExtensions.ForEach(Extensions.Players, p => p.InstantKillEnabled = false);
             response = "Instant killing has been removed from everyone";
             return true;
         }

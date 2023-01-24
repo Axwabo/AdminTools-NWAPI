@@ -32,20 +32,20 @@ namespace AdminTools.Commands.Inventory
                 return false;
             }
 
-            Player ply = int.TryParse(arguments.At(0), out int id) ? Player.GetPlayers().FirstOrDefault(x => x.PlayerId == id) : Player.GetByName(arguments.At(0));
-            if (ply == null)
+            Player p = Extensions.GetPlayer(arguments.At(0));
+            if (p == null)
             {
                 response = $"Player not found: {arguments.At(0)}";
                 return false;
             }
 
             StringBuilder invBuilder = StringBuilderPool.Shared.Rent();
-            if (ply.ReferenceHub.inventory.UserInventory.Items.Count != 0)
+            if (p.ReferenceHub.inventory.UserInventory.Items.Count != 0)
             {
                 invBuilder.Append("Player ");
-                invBuilder.Append(ply.Nickname);
+                invBuilder.Append(p.Nickname);
                 invBuilder.AppendLine(" has the following items in their inventory:");
-                foreach (ItemBase item in ply.ReferenceHub.inventory.UserInventory.Items.Select(x => x.Value))
+                foreach (ItemBase item in p.ReferenceHub.inventory.UserInventory.Items.Select(x => x.Value))
                 {
                     invBuilder.Append("- ");
                     invBuilder.AppendLine(item.ItemTypeId.ToString());
@@ -54,7 +54,7 @@ namespace AdminTools.Commands.Inventory
             else
             {
                 invBuilder.Append("Player ");
-                invBuilder.Append(ply.Nickname);
+                invBuilder.Append(p.Nickname);
                 invBuilder.Append(" does not have any items in their inventory");
             }
             string msg = invBuilder.ToString();

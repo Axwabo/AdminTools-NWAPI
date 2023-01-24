@@ -17,7 +17,6 @@ namespace AdminTools
         public EventHandlers EventHandlers;
 
         public static readonly List<Jailed> JailedPlayers = new();
-        public static readonly Dictionary<Player, List<GameObject>> BenchHubs = new();
         public static readonly Dictionary<Player, List<GameObject>> DumHubs = new();
         public string OverwatchFilePath;
         public string HiddenTagsFilePath;

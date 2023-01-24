@@ -3,6 +3,7 @@ using NorthwoodLib.Pools;
 using System;
 using System.Linq;
 using System.Text;
+using Utils.NonAllocLINQ;
 
 namespace AdminTools.Commands.BreakDoors
 {
@@ -34,11 +35,11 @@ namespace AdminTools.Commands.BreakDoors
             if (arguments.Count >= 1)
                 return arguments.At(0).ToLower() switch
                 {
-                    "clear" => HandleClear(arguments, out response),
-                    "list" => HandleList(out response),
-                    "remove" => HandleRemove(arguments, out response),
-                    "*" => HandleAll(arguments, out response),
-                    "all" => HandleAll(arguments, out response),
+                    "clear" => HandleClear(out response),
+                    "list" => List(out response),
+                    "remove" => Remove(arguments, out response),
+                    "*" => All(out response),
+                    "all" => All(out response),
                     _ => HandleDefault(arguments, out response)
                 };
 
@@ -68,21 +69,13 @@ namespace AdminTools.Commands.BreakDoors
             response = $"Break doors is now {(p.BreakDoorsEnabled ? "on" : "off")} for {p.Nickname}";
             return true;
         }
-        private static bool HandleAll(ArraySegment<string> arguments, out string response)
+        private static bool All(out string response)
         {
-            if (arguments.Count < 1)
-            {
-                response = "Usage: breakdoors all / *";
-                return false;
-            }
-
-            foreach (AtPlayer ply in Extensions.Players.Where(ply => !ply.BreakDoorsEnabled))
-                ply.BreakDoorsEnabled = true;
-
+            ListExtensions.ForEach(Extensions.Players, p => p.BreakDoorsEnabled = true);
             response = "Everyone on the server can instantly kill other users now";
             return true;
         }
-        private static bool HandleRemove(ArraySegment<string> arguments, out string response)
+        private static bool Remove(ArraySegment<string> arguments, out string response)
         {
             if (arguments.Count < 2)
             {
@@ -106,7 +99,7 @@ namespace AdminTools.Commands.BreakDoors
                 response = $"Player {p.Nickname} does not have the ability to break doors";
             return true;
         }
-        private static bool HandleList(out string response)
+        private static bool List(out string response)
         {
             AtPlayer[] list = Extensions.Players.Where(p => p.BreakDoorsEnabled).ToArray();
             StringBuilder playerLister = StringBuilderPool.Shared.Rent(list.Length != 0 ? "Players with break doors on:\n" : "No players currently online have break doors on");
@@ -120,17 +113,9 @@ namespace AdminTools.Commands.BreakDoors
             response = StringBuilderPool.Shared.ToStringReturn(playerLister);
             return true;
         }
-        private static bool HandleClear(ArraySegment<string> arguments, out string response)
+        private static bool HandleClear(out string response)
         {
-            if (arguments.Count < 1)
-            {
-                response = "Usage: breakdoors clear";
-                return false;
-            }
-
-            foreach (AtPlayer ply in Extensions.Players)
-                ply.BreakDoorsEnabled = false;
-
+            ListExtensions.ForEach(Extensions.Players, p => p.BreakDoorsEnabled = false);
             response = "Door breaking has been removed from everyone";
             return true;
         }

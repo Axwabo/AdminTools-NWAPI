@@ -1,5 +1,6 @@
 ﻿using PluginAPI.Core;
 using PluginAPI.Core.Interfaces;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AdminTools
@@ -19,6 +20,8 @@ namespace AdminTools
         public bool InstantKillEnabled { get; set; }
 
         public bool RegenerationEnabled { get; set; }
+
+        public readonly List<GameObject> Workbenches = new();
 
         private float _regenTime;
 

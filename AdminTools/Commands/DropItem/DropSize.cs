@@ -69,12 +69,12 @@ namespace AdminTools.Commands.DropItem
             }
 
             if (InventoryItemLoader.AvailableItems.TryGetValue(type, out ItemBase item))
-                return ParseSize(players, item, arguments, out response, type);
+                return ParseSize(players, item, arguments, out response);
             response = $"Could not find item with type: {type}";
             return false;
 
         }
-        private static bool ParseSize(List<Player> players, ItemBase itemBase, ArraySegment<string> arguments, out string response, ItemType type)
+        private static bool ParseSize(List<Player> players, ItemBase itemBase, ArraySegment<string> arguments, out string response)
         {
             switch (arguments.Count)
             {

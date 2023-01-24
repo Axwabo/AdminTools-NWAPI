@@ -1,3 +1,4 @@
+using AdminTools.Commands.Dummy;
 using AdminTools.Enums;
 using Interactables.Interobjects.DoorUtils;
 using InventorySystem.Items.Firearms.Attachments;
@@ -5,11 +6,11 @@ using MEC;
 using Mirror;
 using NorthwoodLib.Pools;
 using PlayerRoles;
+using PlayerRoles.FirstPersonControl;
 using PlayerStatsSystem;
 using PluginAPI.Core;
 using PluginAPI.Core.Attributes;
 using PluginAPI.Enums;
-using RemoteAdmin;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -48,25 +49,26 @@ namespace AdminTools
             return msg;
         }
 
-        public static void SpawnDummyModel(Player ply, Vector3 position, Quaternion rotation, RoleTypeId role, float x, float y, float z, out int dummyIndex)
+        public static void SpawnDummyModel(Player p, Vector3 position, Quaternion rotation, RoleTypeId role, Vector3 scale, out int dummyIndex)
         {
             dummyIndex = 0;
-            GameObject obj = Object.Instantiate(NetworkManager.singleton.playerPrefab);
-            CharacterClassManager ccm = obj.GetComponent<CharacterClassManager>();
-            ccm._hub.roleManager.ServerSetRole(role, RoleChangeReason.RemoteAdmin);
+            GameObject clone = Object.Instantiate(NetworkManager.singleton.playerPrefab);
+            ReferenceHub hub = clone.GetComponent<ReferenceHub>();
+            NetworkServer.AddPlayerForConnection(new NullConnection(hub.PlayerId), clone);
+            CharacterClassManager ccm = hub.characterClassManager;
             ccm.GodMode = true;
-            obj.GetComponent<NicknameSync>().Network_myNickSync = "Dummy";
-            obj.GetComponent<QueryProcessor>()._hub.Network_playerId = new RecyclablePlayerId(9999);
-            Transform t = obj.transform;
-            t.localScale = new Vector3(x, y, z);
+            hub.roleManager.ServerSetRole(role, RoleChangeReason.RemoteAdmin);
+            hub.nicknameSync.Network_myNickSync = "Dummy";
+            Transform t = clone.transform;
+            t.localScale = scale;
             t.position = position;
             t.rotation = rotation;
-            NetworkServer.Spawn(obj);
-            List<GameObject> objs = Plugin.DumHubs.GetOrAdd(ply, GameObjectListFactory);
-            objs.Add(obj);
-            dummyIndex = objs.Count;
+            hub.TryOverridePosition(position, rotation.eulerAngles);
+            List<GameObject> list = Plugin.DumHubs.GetOrAdd(p, GameObjectListFactory);
+            list.Add(clone);
+            dummyIndex = list.Count;
             if (dummyIndex != 1)
-                dummyIndex = objs.Count;
+                dummyIndex = list.Count;
         }
         private static List<GameObject> GameObjectListFactory() => new();
 
@@ -97,13 +99,13 @@ namespace AdminTools
                 player.Unmute(true);
         }
 
-        public static void SpawnWorkbench(Player ply, Vector3 position, Vector3 rotation, Vector3 size, out int benchIndex)
+        public static GameObject SpawnWorkbench(AtPlayer p, Vector3 position, Vector3 rotation, Vector3 size, out int benchIndex)
         {
             try
             {
                 Log.Debug("Spawning workbench");
                 benchIndex = 0;
-                GameObject bench = Object.Instantiate(NetworkManager.singleton.spawnPrefabs.Find(p => p.gameObject.name == "Work Station"));
+                GameObject bench = Object.Instantiate(NetworkClient.prefabs.Values.FirstOrDefault(o => o.TryGetComponent(out WorkstationController _)));
                 rotation.x += 180;
                 rotation.z += 180;
                 Offset offset = new()
@@ -114,21 +116,23 @@ namespace AdminTools
                 };
                 bench.gameObject.transform.localScale = size;
                 NetworkServer.Spawn(bench);
-                List<GameObject> objs = Plugin.BenchHubs.GetOrAdd(ply, GameObjectListFactory);
-                objs.Add(bench);
-                benchIndex = Plugin.BenchHubs[ply].Count;
-
+                List<GameObject> list = p.Workbenches;
+                list.Add(bench);
+                benchIndex = list.Count;
                 if (benchIndex != 1)
-                    benchIndex = objs.Count;
-                bench.transform.localPosition = offset.position;
-                bench.transform.localRotation = Quaternion.Euler(offset.rotation);
+                    benchIndex = list.Count;
+                Transform t = bench.transform;
+                t.localPosition = offset.position;
+                t.localRotation = Quaternion.Euler(offset.rotation);
                 if (!bench.TryGetComponent(out WorkstationController _))
                     bench.AddComponent<WorkstationController>();
+                return bench;
             }
             catch (Exception e)
             {
                 Log.Error($"{nameof(SpawnWorkbench)}: {e}");
                 benchIndex = -1;
+                return null;
             }
         }
 
