@@ -2,6 +2,7 @@
 using PluginAPI.Core;
 using System;
 using System.Linq;
+using VoiceChat;
 
 namespace AdminTools.Commands.Mute
 {
@@ -22,13 +23,6 @@ namespace AdminTools.Commands.Mute
         {
             if (!sender.CheckPermission(this, out response))
                 return false;
-
-            if (arguments.Count < 0)
-            {
-                response = "Usage: pmute roundstart";
-                return false;
-            }
-
             if (Round.IsRoundStarted)
             {
                 response = "You cannot use this command after the round has started!";
@@ -37,13 +31,13 @@ namespace AdminTools.Commands.Mute
 
             foreach (Player player in Player.GetPlayers().Where(MuteApplicable))
             {
-                player.Mute();
+                player.SetMuteFlag(VcMuteFlags.LocalRegular, true);
                 Plugin.RoundStartMutes.Add(player.UserId);
             }
 
             response = "All non-staff players have been muted until the round starts.";
             return true;
         }
-        private static bool MuteApplicable(Player player) => !player.IsMuted && !player.ReferenceHub.serverRoles.RemoteAdmin;
+        private static bool MuteApplicable(Player player) => !player.ReferenceHub.serverRoles.RemoteAdmin && !player.IsMuted;
     }
 }

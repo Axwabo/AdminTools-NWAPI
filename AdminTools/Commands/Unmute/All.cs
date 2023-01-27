@@ -2,6 +2,7 @@
 using PluginAPI.Core;
 using System;
 using System.Linq;
+using VoiceChat;
 
 namespace AdminTools.Commands.Unmute
 {
@@ -23,17 +24,8 @@ namespace AdminTools.Commands.Unmute
             if (!sender.CheckPermission(this, out response))
                 return false;
 
-            if (arguments.Count < 0)
-            {
-                response = "Usage: punmute all";
-                return false;
-            }
-
-            foreach (Player ply in Player.GetPlayers().Where(ply => !ply.ReferenceHub.serverRoles.RemoteAdmin))
-            {
-                ply.IntercomUnmute(true);
-                ply.Unmute(true);
-            }
+            foreach (Player p in Player.GetPlayers().Where(p => !p.ReferenceHub.serverRoles.RemoteAdmin))
+                p.SetMuteFlag(VcMuteFlags.LocalRegular | VcMuteFlags.LocalIntercom, false);
 
             response = "Everyone from the server who is not a staff can now speak freely";
             return true;

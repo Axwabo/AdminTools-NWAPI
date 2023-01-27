@@ -1,6 +1,7 @@
 ﻿using CommandSystem;
 using PluginAPI.Core;
 using System;
+using VoiceChat;
 
 namespace AdminTools.Commands.Unmute
 {
@@ -19,16 +20,8 @@ namespace AdminTools.Commands.Unmute
         {
             if (!sender.CheckPermission(this, out response))
                 return false;
-
-            if (arguments.Count < 0)
-            {
-                response = "Usage: punmute icom";
-                return false;
-            }
-
             foreach (Player ply in Player.GetPlayers())
-                ply.IntercomUnmute(true);
-
+                ply.SetMuteFlag(VcMuteFlags.LocalIntercom, false);
             response = "Everyone from the server who is not a staff can speak in the intercom now";
             return true;
         }

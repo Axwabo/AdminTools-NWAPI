@@ -427,12 +427,12 @@ namespace AdminTools
             if (door is not IDamageableDoor { IsDestroyed: false } dmg)
                 return false;
 
-            dmg.ServerDamage(ushort.MaxValue, type);
+            dmg.ServerDamage(float.MaxValue, type);
             return true;
 
         }
 
-        public static ThrowableItem CreateThrowable(ItemType type, Player player = null) => (player != null ? player.ReferenceHub : ReferenceHub._hostHub)
+        public static ThrowableItem CreateThrowable(ItemType type, Player player = null) => (player != null ? player.ReferenceHub : ReferenceHub.HostHub)
             .inventory.CreateItemInstance(new ItemIdentifier(type, ItemSerialGenerator.GenerateNext()), false) as ThrowableItem;
 
         public static ReadOnlyCollection<ItemPickupBase> GetPickups() => Object.FindObjectsOfType<ItemPickupBase>().ToList().AsReadOnly();

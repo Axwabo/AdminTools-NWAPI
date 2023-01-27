@@ -43,7 +43,7 @@ namespace AdminTools.Commands.Basic
                 ? $"{players[0].Nickname} has received a bouncing ball!"
                 : $"The balls are bouncing for {players.Count} players!";
             if (players.Count > 1)
-                Cassie.Message("pitch_1.5 xmas_bouncyballs", true, false);
+                Cassie.Message("pitch_1.5 xmas_bouncyballs", false, false);
 
             foreach (Player p in players)
                 Handlers.CreateThrowable(ItemType.SCP018).SpawnActive(p.Position, owner: p);

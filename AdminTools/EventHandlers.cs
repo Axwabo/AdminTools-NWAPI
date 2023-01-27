@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using Utils.NonAllocLINQ;
+using VoiceChat;
 using Object = UnityEngine.Object;
 
 namespace AdminTools
@@ -90,13 +91,6 @@ namespace AdminTools
                 NetworkServer.Spawn(gameObject);
                 yield return Timing.WaitForOneFrame;
             }
-        }
-
-        [PluginEvent(ServerEventType.PlayerLeft)]
-        public void OnPlayerDestroyed(AtPlayer player)
-        {
-            if (Plugin.RoundStartMutes.Remove(player.UserId))
-                player.Unmute(true);
         }
 
         [PluginEvent(ServerEventType.PlayerChangeRole)]
@@ -198,7 +192,7 @@ namespace AdminTools
                 if (current >= maxAmount)
                 {
                     player.IsGodModeEnabled = false;
-                    Handlers.CreateThrowable(ItemType.GrenadeHE).SpawnActive(player.Position, .1f, player);
+                    Handlers.CreateThrowable(ItemType.GrenadeHE).SpawnActive(player.Position, .5f, player);
                     player.Kill("Went on a trip in their favorite rocket ship.");
                     player.IsGodModeEnabled = godMode;
                     yield break;
@@ -238,7 +232,7 @@ namespace AdminTools
             if (jail.CurrentRound)
             {
                 player.SetRole(jail.Role);
-                yield return Timing.WaitForSeconds(0.5f);
+                yield return Timing.WaitForOneFrame;
                 try
                 {
                     player.ResetInventory(jail.Items);
@@ -279,11 +273,11 @@ namespace AdminTools
                     Timing.CallDelayed(1, () => player.SetBadgeVisibility(true));
                 }
 
-                if (Plugin.RoundStartMutes.Count == 0 || player.ReferenceHub.serverRoles.RemoteAdmin || !Plugin.RoundStartMutes.Add(player.UserId))
+                if (Plugin.RoundStartMutes.Count == 0 || player.ReferenceHub.serverRoles.RemoteAdmin || !Plugin.RoundStartMutes.Contains(player.UserId))
                     return;
 
                 Log.Debug($"Muting {player.UserId} (no RA).");
-                player.Mute();
+                player.SetMuteFlag(VcMuteFlags.LocalRegular, true);
             }
             catch (Exception e)
             {
@@ -297,7 +291,7 @@ namespace AdminTools
         public static void ClearRoundStartMutes()
         {
             foreach (Player p in Plugin.RoundStartMutes.Select(Player.Get))
-                p?.Unmute(true);
+                p?.SetMuteFlag(VcMuteFlags.LocalRegular, false);
 
             Plugin.RoundStartMutes.Clear();
         }

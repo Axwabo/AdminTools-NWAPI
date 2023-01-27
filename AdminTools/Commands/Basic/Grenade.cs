@@ -34,7 +34,7 @@ namespace AdminTools.Commands.Basic
             {
                 case "*" or "all":
                     if (type == ItemType.SCP018)
-                        Cassie.Message("pitch_1.5 xmas_bouncyballs", true, false);
+                        Cassie.Message("pitch_1.5 xmas_bouncyballs", false, false);
 
                     foreach (Player p in Player.GetPlayers().Where(Extensions.IsAlive))
                         Handlers.CreateThrowable(type).SpawnActive(p.Position, fuseTime);

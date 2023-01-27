@@ -20,7 +20,6 @@ namespace AdminTools.Commands.Unmute
         {
             if (!sender.CheckPermission(this, out response))
                 return false;
-
             EventHandlers.ClearRoundStartMutes();
             response = "All non-staff players that were muted until round start have been unmuted.";
             return true;

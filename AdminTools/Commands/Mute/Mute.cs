@@ -5,7 +5,7 @@ namespace AdminTools.Commands.Mute
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class Mute : ParentCommand, IDefaultPermissions
+    public sealed class Mute : ParentCommand
     {
         public Mute() => LoadGeneratedCommands();
 
@@ -23,13 +23,8 @@ namespace AdminTools.Commands.Mute
             RegisterCommand(new RoundStart());
         }
 
-        public PlayerPermissions Permissions => PlayerPermissions.PlayersManagement;
-
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!sender.CheckPermission(this, out response))
-                return false;
-
             response = "Invalid subcommand. Available ones: icom, all, roundstart";
             return false;
         }

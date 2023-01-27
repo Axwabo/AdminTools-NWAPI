@@ -2,6 +2,7 @@
 using PluginAPI.Core;
 using System;
 using System.Linq;
+using VoiceChat;
 
 namespace AdminTools.Commands.Mute
 {
@@ -27,11 +28,12 @@ namespace AdminTools.Commands.Mute
                 return false;
             }
 
-            foreach (Player player in Player.GetPlayers().Where(player => !player.ReferenceHub.serverRoles.RemoteAdmin && player.IsIntercomMuted))
-                player.IntercomUnmute(true);
+            foreach (Player player in Player.GetPlayers().Where(IsIntercomMuteApplicable))
+                player.SetMuteFlag(VcMuteFlags.LocalIntercom, true);
 
             response = "Everyone from the server who is not a staff has been intercom muted";
             return true;
         }
+        private static bool IsIntercomMuteApplicable(Player player) => !player.ReferenceHub.serverRoles.RemoteAdmin && !player.IsIntercomMuted;
     }
 }
