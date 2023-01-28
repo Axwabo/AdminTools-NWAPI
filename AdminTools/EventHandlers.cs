@@ -2,6 +2,7 @@ using AdminTools.Commands.Dummy;
 using AdminTools.Enums;
 using Interactables.Interobjects.DoorUtils;
 using InventorySystem.Items.Firearms.Attachments;
+using MapGeneration;
 using MEC;
 using Mirror;
 using NorthwoodLib.Pools;
@@ -11,6 +12,7 @@ using PlayerStatsSystem;
 using PluginAPI.Core;
 using PluginAPI.Core.Attributes;
 using PluginAPI.Enums;
+using RelativePositioning;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -160,17 +162,20 @@ namespace AdminTools
                 {
                     netId = identity.netId
                 };
-
+                PlayerRoleManager rm = target.ReferenceHub.roleManager;
                 foreach (Player player in Player.GetPlayers())
                 {
-                    if (player.GameObject == go)
-                        continue;
                     NetworkConnection connection = player.Connection;
-                    connection.Send(destroyMessage);
+                    bool differentPlayer = player.GameObject != target.GameObject;
+                    if (differentPlayer)
+                        connection.Send(destroyMessage);
                     NetworkServer.SendSpawnMessage(identity, connection);
+                    RoleTypeId role = rm.CurrentRole.RoleTypeId;
+                    if (rm.CurrentRole is IObfuscatedRole currentRole)
+                        role = currentRole.GetRoleForUser(player.ReferenceHub);
+                    if (differentPlayer)
+                        connection.Send(new RoleSyncInfo(target.ReferenceHub, role, player.ReferenceHub));
                 }
-
-                target.ReferenceHub.roleManager._sendNextFrame = true;
             }
             catch (Exception e)
             {
@@ -211,7 +216,7 @@ namespace AdminTools
                 Plugin.JailedPlayers.Add(new Jailed
                 {
                     Health = player.Health,
-                    Position = player.Position,
+                    Position = GetSafeRelativePosition(player),
                     Items = items,
                     Role = player.Role,
                     UserId = player.UserId,
@@ -229,7 +234,18 @@ namespace AdminTools
         public static IEnumerator<float> DoUnJail(Player player)
         {
             Jailed jail = Plugin.JailedPlayers.Find(j => j.UserId == player.UserId);
-            if (jail.CurrentRound)
+            bool posSet = false;
+            Vector3 pos = Vector3.zero;
+            try
+            {
+                pos = jail.Position.Position;
+                posSet = true;
+            }
+            catch (Exception e)
+            {
+                Log.Error($"{nameof(DoUnJail)} failed getting position: {e}");
+            }
+            if (jail.CurrentRound && posSet && VerifyDetonationPosition(ref pos))
             {
                 player.SetRole(jail.Role);
                 yield return Timing.WaitForOneFrame;
@@ -237,7 +253,7 @@ namespace AdminTools
                 {
                     player.ResetInventory(jail.Items);
                     player.Health = jail.Health;
-                    player.Position = jail.Position;
+                    player.Position = pos;
                     foreach (KeyValuePair<AmmoType, ushort> kvp in jail.Ammo)
                         player.AddAmmo(kvp.Key.GetItemType(), kvp.Value);
                 }
@@ -251,6 +267,29 @@ namespace AdminTools
                 player.SetRole(RoleTypeId.Spectator);
             }
             Plugin.JailedPlayers.Remove(jail);
+        }
+        private static RelativePosition GetSafeRelativePosition(Player player)
+        {
+            RelativePosition relative = new(player.Position);
+            return !WaypointBase.TryGetWaypoint(relative.WaypointId, out WaypointBase waypoint)
+                || waypoint is not ElevatorWaypoint { _elevator._lastDestination: { } dest }
+                    ? relative
+                    : new RelativePosition(dest.transform.TransformPoint(Vector3.forward) + Vector3.up);
+        }
+        private static bool VerifyDetonationPosition(ref Vector3 pos)
+        {
+            if (!Warhead.IsDetonated)
+                return true;
+            if (AlphaWarheadController.CanBeDetonated(pos) && !_pl.Config.TeleportUnjailedToSurfaceAfterWarheadDetonation)
+                return false;
+            RoomIdentifier room = Object.FindObjectsOfType<RoomIdentifier>().FirstOrDefault(r => r.Name == RoomName.Outside);
+            if (room == null)
+                return false;
+            SafeTeleportPosition safe = room.transform.root.GetComponentInChildren<SafeTeleportPosition>();
+            if (safe == null || safe.SafePositions.Length == 0)
+                return false;
+            pos = safe.SafePositions.RandomItem().position;
+            return true;
         }
 
         [PluginEvent(ServerEventType.PlayerJoined)]

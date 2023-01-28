@@ -1,17 +1,17 @@
 using AdminTools.Enums;
 using PlayerRoles;
+using RelativePositioning;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace AdminTools
 {
 
     public sealed class Jailed
     {
-        public string UserId;
+        public required string UserId { get; init; }
         public List<ItemType> Items;
         public RoleTypeId Role;
-        public Vector3 Position;
+        public RelativePosition Position;
         public float Health;
         public Dictionary<AmmoType, ushort> Ammo;
         public bool CurrentRound;

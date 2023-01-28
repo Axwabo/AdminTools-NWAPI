@@ -15,7 +15,7 @@ namespace AdminTools
     {
         public const string Author = "Galaxy119, Neil, Axwabo";
         public const string Name = "Admin Tools";
-        public const string Version = "2.0.1";
+        public const string Version = "2.1.0";
 
         public EventHandlers EventHandlers;
 
@@ -56,7 +56,7 @@ namespace AdminTools
             EventHandlers = new EventHandlers(this);
             EventManager.RegisterEvents(this, EventHandlers);
             Log.Info("AdminTools has been enabled!");
-            if (Config.RegisterJailCommand)
+            if (!Config.RegisterJailCommand)
                 return;
             _jail = new Jail();
             CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(_jail);
