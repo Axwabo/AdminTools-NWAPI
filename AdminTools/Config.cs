@@ -18,5 +18,7 @@ namespace AdminTools
                 "other", PlayerPermissions.FacilityManagement
             }
         };
+        
+        public bool RegisterJailCommand { get; set; } = true;
     }
 }

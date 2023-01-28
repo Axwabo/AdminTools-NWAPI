@@ -8,24 +8,20 @@ namespace AdminTools.Commands.Basic
 
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class Grenade : ParentCommand, IDefaultPermissions
+    public sealed class Grenade : ICommand, IDefaultPermissions
     {
-        public Grenade() => LoadGeneratedCommands();
+        public string Command => "grenade";
 
-        public override string Command => "grenade";
-
-        public override string[] Aliases { get; } =
+        public string[] Aliases { get; } =
         {
             "gn"
         };
 
-        public override string Description => "Spawns a HE grenade/flashbang/SCP-018 on a user or users";
-
-        public override void LoadGeneratedCommands() { }
+        public string Description => "Spawns a HE grenade/flashbang/SCP-018 on a user or users";
 
         public PlayerPermissions Permissions => PlayerPermissions.GivingItems;
 
-        protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!ValidateArguments(this, arguments, sender, out response, out ItemType type, out float fuseTime))
                 return false;

@@ -7,24 +7,21 @@ namespace AdminTools.Commands.Basic
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class AdminBroadcast : ParentCommand, IDefaultPermissions
+    public sealed class AdminBroadcast : ICommand, IDefaultPermissions
     {
-        public AdminBroadcast() => LoadGeneratedCommands();
 
-        public override string Command => "adminbroadcast";
+        public string Command => "adminbroadcast";
 
-        public override string[] Aliases { get; } =
+        public string[] Aliases { get; } =
         {
             "abc"
         };
 
-        public override string Description => "Sends a message to all currently online staff on the server";
+        public string Description => "Sends a message to all currently online staff on the server";
 
-        public override void LoadGeneratedCommands() { }
+        public PlayerPermissions Permissions => PlayerPermissions.AdminChat;
 
-        public PlayerPermissions Permissions => PlayerPermissions.Broadcasting;
-
-        protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission(this, out response))
                 return false;

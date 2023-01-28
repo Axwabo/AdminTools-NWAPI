@@ -9,22 +9,18 @@ namespace AdminTools.Commands.Basic
 
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class Ball : ParentCommand, IDefaultPermissions
+    public sealed class Ball : ICommand, IDefaultPermissions
     {
-        public Ball() => LoadGeneratedCommands();
+        public string Command => "ball";
 
-        public override string Command => "ball";
-
-        public override string[] Aliases { get; } =
+        public string[] Aliases { get; } =
             { };
 
-        public override string Description => "Spawns a bouncy ball (SCP-018) on a user or all users";
-
-        public override void LoadGeneratedCommands() { }
+        public string Description => "Spawns a bouncy ball (SCP-018) on a user or all users";
 
         public PlayerPermissions Permissions => PlayerPermissions.GivingItems;
 
-        protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission(this, out response))
                 return false;

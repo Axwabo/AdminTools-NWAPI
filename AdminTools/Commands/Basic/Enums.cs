@@ -7,22 +7,18 @@ namespace AdminTools.Commands.Basic
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class Enums : ParentCommand
+    public sealed class Enums : ICommand
     {
-        public Enums() => LoadGeneratedCommands();
+        public string Command => "enums";
 
-        public override string Command => "enums";
-
-        public override string[] Aliases { get; } =
+        public string[] Aliases { get; } =
         {
             "enum"
         };
 
-        public override string Description => "Lists all enums AdminTools uses";
+        public string Description => "Lists all enums AdminTools uses";
 
-        public override void LoadGeneratedCommands() { }
-
-        protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             StringBuilder listBuilder = StringBuilderPool.Shared.Rent();
             listBuilder.Append("Here are the following enums you can use in commands:");

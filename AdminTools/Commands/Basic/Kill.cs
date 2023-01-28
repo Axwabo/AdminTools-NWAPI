@@ -7,22 +7,18 @@ namespace AdminTools.Commands.Basic
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class Kill : ParentCommand, IDefaultPermissions
+    public sealed class Kill : ICommand, IDefaultPermissions
     {
-        public Kill() => LoadGeneratedCommands();
+        public string Command => "atkill";
 
-        public override string Command => "atkill";
-
-        public override string[] Aliases { get; } =
+        public string[] Aliases { get; } =
             { };
 
-        public override string Description => "Kills everyone or a user instantly";
-
-        public override void LoadGeneratedCommands() { }
+        public string Description => "Kills everyone or a user instantly";
 
         public PlayerPermissions Permissions => PlayerPermissions.ForceclassToSpectator;
 
-        protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission(this, out response))
                 return false;

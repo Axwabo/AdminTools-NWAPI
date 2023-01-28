@@ -9,22 +9,18 @@ namespace AdminTools.Commands.Basic
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class RandomTeleport : ParentCommand, IDefaultPermissions
+    public sealed class RandomTeleport : ICommand, IDefaultPermissions
     {
-        public RandomTeleport() => LoadGeneratedCommands();
+        public string Command => "randomtp";
 
-        public override string Command => "randomtp";
-
-        public override string[] Aliases { get; } =
+        public string[] Aliases { get; } =
             { };
 
-        public override string Description => "Randomly teleports a user or all users to a random room in the facility";
-
-        public override void LoadGeneratedCommands() { }
+        public string Description => "Randomly teleports a user or all users to a random room in the facility";
 
         public PlayerPermissions Permissions => PlayerPermissions.PlayersManagement;
 
-        protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission(this, out response))
                 return false;

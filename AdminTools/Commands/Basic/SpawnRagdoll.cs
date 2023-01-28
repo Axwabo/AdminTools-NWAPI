@@ -10,24 +10,20 @@ namespace AdminTools.Commands.Basic
 
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class SpawnRagdoll : ParentCommand, IDefaultPermissions
+    public sealed class SpawnRagdoll : ICommand, IDefaultPermissions
     {
-        public SpawnRagdoll() => LoadGeneratedCommands();
+        public string Command => "spawnragdoll";
 
-        public override string Command => "spawnragdoll";
-
-        public override string[] Aliases { get; } =
+        public string[] Aliases { get; } =
         {
             "ragdoll", "rd", "rag", "doll"
         };
 
-        public override string Description => "Spawns a specified number of ragdolls on a user";
-
-        public override void LoadGeneratedCommands() { }
+        public string Description => "Spawns a specified number of ragdolls on a user";
 
         public PlayerPermissions Permissions => PlayerPermissions.RespawnEvents;
 
-        protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!ValidateArguments(this, arguments, sender, out response, out RoleTypeId type, out int amount, out IRagdollRole ragdollRole))
                 return false;

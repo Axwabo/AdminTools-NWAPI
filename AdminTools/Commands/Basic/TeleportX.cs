@@ -7,24 +7,20 @@ namespace AdminTools.Commands.Basic
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class TeleportX : ParentCommand, IDefaultPermissions
+    public sealed class TeleportX : ICommand, IDefaultPermissions
     {
-        public TeleportX() => LoadGeneratedCommands();
+        public string Command => "teleportx";
 
-        public override string Command => "teleportx";
-
-        public override string[] Aliases { get; } =
+        public string[] Aliases { get; } =
         {
             "tpx"
         };
 
-        public override string Description => "Teleports all users or a user to another user";
-
-        public override void LoadGeneratedCommands() { }
+        public string Description => "Teleports all users or a user to another user";
 
         public PlayerPermissions Permissions => PlayerPermissions.PlayersManagement;
 
-        protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission(this, out response))
                 return false;

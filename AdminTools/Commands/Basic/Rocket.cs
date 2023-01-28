@@ -7,22 +7,18 @@ namespace AdminTools.Commands.Basic
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class Rocket : ParentCommand, IDefaultPermissions
+    public sealed class Rocket : ICommand, IDefaultPermissions
     {
-        public Rocket() => LoadGeneratedCommands();
+        public string Command => "rocket";
 
-        public override string Command => "rocket";
-
-        public override string[] Aliases { get; } =
+        public string[] Aliases { get; } =
             { };
 
-        public override string Description => "Sends players high in the sky and explodes them";
-
-        public override void LoadGeneratedCommands() { }
+        public string Description => "Sends players high in the sky and explodes them";
 
         public PlayerPermissions Permissions => PlayerPermissions.ForceclassWithoutRestrictions;
 
-        protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission(this, out response))
                 return false;

@@ -8,24 +8,20 @@ namespace AdminTools.Commands.Basic
 
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
-    public sealed class Explode : ParentCommand, IDefaultPermissions
+    public sealed class Explode : ICommand, IDefaultPermissions
     {
-        public Explode() => LoadGeneratedCommands();
+        public string Command => "expl";
 
-        public override string Command => "expl";
-
-        public override string[] Aliases { get; } =
+        public string[] Aliases { get; } =
         {
             "boom"
         };
 
-        public override string Description => "Explodes a specified user or everyone instantly";
-
-        public override void LoadGeneratedCommands() { }
+        public string Description => "Explodes a specified user or everyone instantly";
 
         public PlayerPermissions Permissions => PlayerPermissions.ForceclassToSpectator;
 
-        protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission(this, out response))
                 return false;
