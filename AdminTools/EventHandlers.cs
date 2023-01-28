@@ -157,24 +157,9 @@ namespace AdminTools
             {
                 NetworkIdentity identity = target.ReferenceHub.networkIdentity;
                 go.transform.localScale = scale;
-
-                ObjectDestroyMessage destroyMessage = new()
-                {
-                    netId = identity.netId
-                };
-                PlayerRoleManager rm = target.ReferenceHub.roleManager;
                 foreach (Player player in Player.GetPlayers())
                 {
-                    NetworkConnection connection = player.Connection;
-                    bool differentPlayer = player.GameObject != target.GameObject;
-                    if (differentPlayer)
-                        connection.Send(destroyMessage);
-                    NetworkServer.SendSpawnMessage(identity, connection);
-                    RoleTypeId role = rm.CurrentRole.RoleTypeId;
-                    if (rm.CurrentRole is IObfuscatedRole currentRole)
-                        role = currentRole.GetRoleForUser(player.ReferenceHub);
-                    if (differentPlayer)
-                        connection.Send(new RoleSyncInfo(target.ReferenceHub, role, player.ReferenceHub));
+                    NetworkServer.SendSpawnMessage(identity, player.Connection);
                 }
             }
             catch (Exception e)
@@ -234,6 +219,8 @@ namespace AdminTools
         public static IEnumerator<float> DoUnJail(Player player)
         {
             Jailed jail = Plugin.JailedPlayers.Find(j => j.UserId == player.UserId);
+            if (jail == null)
+                yield break;
             bool posSet = false;
             Vector3 pos = Vector3.zero;
             try
