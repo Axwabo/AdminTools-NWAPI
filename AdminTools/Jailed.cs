@@ -15,5 +15,6 @@ namespace AdminTools
         public float Health;
         public Dictionary<AmmoType, ushort> Ammo;
         public bool CurrentRound;
+        public bool GodMode;
     }
 }

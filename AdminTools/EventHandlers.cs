@@ -206,7 +206,8 @@ namespace AdminTools
                     Role = player.Role,
                     UserId = player.UserId,
                     CurrentRound = true,
-                    Ammo = ammo
+                    Ammo = ammo,
+                    GodMode = player.IsGodModeEnabled
                 });
             }
 
@@ -241,6 +242,7 @@ namespace AdminTools
                     player.ResetInventory(jail.Items);
                     player.Health = jail.Health;
                     player.Position = pos;
+                    player.IsGodModeEnabled = jail.GodMode;
                     foreach (KeyValuePair<AmmoType, ushort> kvp in jail.Ammo)
                         player.AddAmmo(kvp.Key.GetItemType(), kvp.Value);
                 }
@@ -265,9 +267,9 @@ namespace AdminTools
         }
         private static bool VerifyDetonationPosition(ref Vector3 pos)
         {
-            if (!Warhead.IsDetonated)
+            if (!Warhead.IsDetonated || !AlphaWarheadController.CanBeDetonated(pos))
                 return true;
-            if (AlphaWarheadController.CanBeDetonated(pos) && !_pl.Config.TeleportUnjailedToSurfaceAfterWarheadDetonation)
+            if (!_pl.Config.TeleportUnjailedToSurfaceAfterWarheadDetonation)
                 return false;
             RoomIdentifier room = Object.FindObjectsOfType<RoomIdentifier>().FirstOrDefault(r => r.Name == RoomName.Outside);
             if (room == null)
@@ -317,7 +319,7 @@ namespace AdminTools
         public static void ClearRoundStartMutes()
         {
             foreach (Player p in Plugin.RoundStartMutes.Select(Player.Get))
-                p?.SetMuteFlag(VcMuteFlags.LocalRegular, false);
+                p.SetMuteFlag(VcMuteFlags.LocalRegular, false);
 
             Plugin.RoundStartMutes.Clear();
         }
