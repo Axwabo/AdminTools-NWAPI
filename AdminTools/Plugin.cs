@@ -32,6 +32,7 @@ namespace AdminTools
         [PluginEntryPoint(Name, Version, "Tools to better support staff", Author)]
         public void Start()
         {
+            Jail.Plugin = this;
             PermissionManager.InitFromConfig(Config);
             FactoryManager.RegisterPlayerFactory<AdminToolsPlayerFactory>(this);
             foreach (KeyValuePair<byte, DeathTranslation> translation in DeathTranslations.TranslationsById)

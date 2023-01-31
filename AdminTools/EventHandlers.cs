@@ -217,6 +217,15 @@ namespace AdminTools
             player.SetRole(RoleTypeId.Tutorial);
         }
 
+        public static IEnumerator<float> DoJail(Player player, Vector3 positionOverride, bool skipAdd = false)
+        {
+            IEnumerator<float> enumerator = DoJail(player, skipAdd);
+            while (enumerator.MoveNext())
+                yield return enumerator.Current;
+            yield return Timing.WaitForSeconds(0.2f);
+            player.Position = positionOverride + Vector3.up;
+        }
+
         public static IEnumerator<float> DoUnJail(Player player)
         {
             Jailed jail = Plugin.JailedPlayers.Find(j => j.UserId == player.UserId);
