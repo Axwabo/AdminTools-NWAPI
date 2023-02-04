@@ -70,7 +70,7 @@ namespace AdminTools.Commands.Basic
         }
         private static int JailWithIndex(Player player, ArraySegment<string> arguments, out string response)
         {
-            if (arguments.Count < 1)
+            if (arguments.Count < 2)
             {
                 response = "";
                 return 0;

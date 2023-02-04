@@ -23,33 +23,81 @@ namespace AdminTools.Commands.Ghost
         {
             if (!sender.CheckPermission(this, out response))
                 return false;
+            if (arguments.Count > 1)
+                return arguments.At(0).ToLower() switch
+                {
+                    "all" or "*" => All(arguments, out response),
+                    _ => HandleDefault(arguments, out response)
+                };
+            response = "Usage: targetghost <player to hide or (all/*)> <target or (all/*)>";
+            return false;
 
-            if (arguments.Count < 2)
+        }
+        private static bool All(ArraySegment<string> arguments, out string response)
+        {
+            if (HideAllFully(arguments, out response))
+                return true;
+
+            AtPlayer player = Extensions.GetPlayer(arguments.At(1));
+            if (player == null)
             {
-                response = "Usage: targetghost <player to hide> <target or (all/*)>";
+                response = $"Player {arguments.At(1)} not found.";
                 return false;
             }
 
-            AtPlayer player = Extensions.GetPlayer(arguments.At(0));
-            if (player != null)
-                return arguments.At(1).ToLower() switch
-                {
-                    "all" or "*" => All(player, out response),
-                    _ => HandleDefault(player, arguments, out response)
-                };
-
-            response = $"Player {arguments.At(0)} not found.";
-            return false;
-        }
-        private static bool All(AtPlayer player, out string response)
-        {
-            GhostController controller = GetController(player);
-            controller.IsFullyInvisible = !controller.IsFullyInvisible;
-            response = $"Player {player.Nickname} is now {(controller.IsFullyInvisible ? "invisible" : "visible")} to everyone.";
+            bool makeInvisible = true;
+            List<AtPlayer> players = Extensions.Players;
+            for (int i = 0; i < players.Count; i++)
+            {
+                GhostController controller = GetController(players[i]);
+                if (i == 0 && controller.InvisibleTo.Contains(player.UserId))
+                    makeInvisible = false;
+                if (makeInvisible)
+                    controller.InvisibleTo.Add(player.UserId);
+                else
+                    controller.InvisibleTo.Remove(player.UserId);
+            }
+            response = $"Everyone is now {(makeInvisible ? "invisible" : "visible")} to player {player.Nickname}";
             return true;
         }
-        private static bool HandleDefault(AtPlayer player, ArraySegment<string> arguments, out string response)
+        private static bool HideAllFully(ArraySegment<string> arguments, out string response)
         {
+            if (arguments.At(1).ToLower() is not ("all" or "*"))
+            {
+                response = "";
+                return false;
+            }
+            bool makeInvisible = false;
+            List<AtPlayer> list = Extensions.Players;
+            for (int i = 0; i < list.Count; i++)
+            {
+                AtPlayer p = list[i];
+                GhostController control = GetController(p);
+                if (i == 0)
+                    makeInvisible = !control.IsFullyInvisible;
+                control.IsFullyInvisible = makeInvisible;
+            }
+
+            response = $"All players are now {(makeInvisible ? "invisible" : "visible")}.";
+            return true;
+        }
+        private static bool HandleDefault(ArraySegment<string> arguments, out string response)
+        {
+            AtPlayer player = Extensions.GetPlayer(arguments.At(0));
+            if (player == null)
+            {
+                response = $"Player {arguments.At(0)} not found.";
+                return false;
+            }
+
+            if (arguments.At(1).ToLower() is "all" or "*")
+            {
+                GhostController controller = GetController(player);
+                controller.IsFullyInvisible = !controller.IsFullyInvisible;
+                response = $"{player.Nickname} is now {(controller.IsFullyInvisible ? "invisible" : "visible")} to everyone";
+                return true;
+            }
+
             AtPlayer hideFor = Extensions.GetPlayer(arguments.At(1));
             if (hideFor == null)
             {
@@ -68,8 +116,7 @@ namespace AdminTools.Commands.Ghost
             return true;
         }
 
-
-        private static GhostController GetController(AtPlayer player) => player.GameObject.TryGetComponent(out GhostController controller)
+        public static GhostController GetController(AtPlayer player) => player.GameObject.TryGetComponent(out GhostController controller)
             ? controller
             : player.GameObject.AddComponent<GhostController>();
 

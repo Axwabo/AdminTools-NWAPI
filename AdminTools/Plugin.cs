@@ -18,7 +18,7 @@ namespace AdminTools
     {
         public const string Author = "Galaxy119, Neil, Axwabo";
         public const string Name = "Admin Tools";
-        public const string Version = "2.2.0";
+        public const string Version = "2.2.1";
 
         public EventHandlers EventHandlers;
 

@@ -211,8 +211,6 @@ namespace AdminTools
                 });
             }
 
-            if (player.IsOverwatchEnabled)
-                player.IsOverwatchEnabled = false;
             yield return Timing.WaitForSeconds(0.2f);
             player.SetRole(RoleTypeId.Tutorial);
         }
