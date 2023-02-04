@@ -17,7 +17,9 @@ HARMFUL CODE. USE PLUGINS AND THE BUILT-IN PLUGIN MANAGER AT YOUR OWN RISK!**
 
 1. Download the `AdminTools.dll` from the [latest release](https://github.com/Axwabo/AdminTools-NWAPI/releases/latest)
 2. Put the DLL in your `plugins` folder (windows: `%appdata%/SCP Secret Laboratory/PluginAPI/plugins/<port>/`)
-3. Restart your server
+3. Download **Harmony** (`Harmony.x.x.x.x.zip`) from [here](https://github.com/pardeike/Harmony/releases/latest/) 
+4. Put the Harmony DLL from the archive's `net4.8` directory in your `dependencies` folder (windows: `%appdata%/SCP Secret Laboratory/PluginAPI/plugins/<port>/dependencies`)
+5. Restart your server
 
 ## Commands and Descriptions
 
@@ -196,6 +198,8 @@ Permissions: **SetGroup**
 Makes a player invisible to another player or all players
 
 Permissions: **Effects**
+
+Note: this only changes client-side visibility; server-side visibility is not affected (SCP-096, SCP-173 visibility etc.)
 
 ### teleportx (aka tpx)
 
