@@ -1,7 +1,7 @@
 using AdminTools.Enums;
 using PlayerRoles;
-using RelativePositioning;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace AdminTools
 {
@@ -11,7 +11,7 @@ namespace AdminTools
         public required string UserId { get; init; }
         public List<ItemType> Items;
         public RoleTypeId Role;
-        public RelativePosition Position;
+        public Vector3 Position;
         public float Health;
         public Dictionary<AmmoType, ushort> Ammo;
         public bool CurrentRound;

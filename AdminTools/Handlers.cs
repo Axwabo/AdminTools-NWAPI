@@ -414,7 +414,7 @@ namespace AdminTools
         public static void ResetInventory(this Player player, List<ItemType> items)
         {
             player.ClearInventory();
-            if (items.Count == 0)
+            if (items is not { Count: not 0 })
                 return;
             foreach (ItemType type in items)
             {

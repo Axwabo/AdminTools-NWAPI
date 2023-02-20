@@ -105,8 +105,10 @@ namespace AdminTools
                 player.WasInGodMode = player.IsGodModeEnabled;
                 player.IsGodModeEnabled = true;
             }
-            else
+            else if (oldRole.RoleTypeId == RoleTypeId.Tutorial)
                 player.IsGodModeEnabled = player.WasInGodMode;
+            else
+                player.WasInGodMode = false;
         }
 
         public static GameObject SpawnWorkbench(AtPlayer p, Vector3 size, out int benchIndex)
@@ -201,7 +203,7 @@ namespace AdminTools
                 Plugin.JailedPlayers.Add(new Jailed
                 {
                     Health = player.Health,
-                    Position = GetSafeRelativePosition(player),
+                    Position = GetSafePosition(player),
                     Items = items,
                     Role = player.Role,
                     UserId = player.UserId,
@@ -233,7 +235,7 @@ namespace AdminTools
             Vector3 pos = Vector3.zero;
             try
             {
-                pos = jail.Position.Position;
+                pos = jail.Position;
                 posSet = true;
             }
             catch (Exception e)
@@ -246,11 +248,11 @@ namespace AdminTools
                 yield return Timing.WaitForOneFrame;
                 try
                 {
-                    player.ResetInventory(jail.Items);
+                    player.IsGodModeEnabled = jail.GodMode;
                     player.Health = jail.Health;
                     player.Position = pos;
-                    player.IsGodModeEnabled = jail.GodMode;
-                    foreach (KeyValuePair<AmmoType, ushort> kvp in jail.Ammo)
+                    player.ResetInventory(jail.Items);
+                    foreach (KeyValuePair<AmmoType, ushort> kvp in jail.Ammo ?? new Dictionary<AmmoType, ushort>())
                         player.AddAmmo(kvp.Key.GetItemType(), kvp.Value);
                 }
                 catch (Exception e)
@@ -264,13 +266,13 @@ namespace AdminTools
             }
             Plugin.JailedPlayers.Remove(jail);
         }
-        private static RelativePosition GetSafeRelativePosition(Player player)
+        private static Vector3 GetSafePosition(Player player)
         {
-            RelativePosition relative = new(player.Position);
-            return !WaypointBase.TryGetWaypoint(relative.WaypointId, out WaypointBase waypoint)
+            Vector3 pos = player.Position;
+            return !WaypointBase.TryGetWaypoint(new RelativePosition(pos).WaypointId, out WaypointBase waypoint)
                 || waypoint is not ElevatorWaypoint { _elevator._lastDestination: { } dest }
-                    ? relative
-                    : new RelativePosition(dest.transform.TransformPoint(Vector3.forward) + Vector3.up);
+                    ? pos
+                    : dest.transform.TransformPoint(Vector3.forward) + Vector3.up;
         }
         private static bool VerifyDetonationPosition(ref Vector3 pos)
         {
