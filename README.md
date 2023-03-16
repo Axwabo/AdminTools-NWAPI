@@ -2,6 +2,10 @@
 
 A port of EXILED's SCP:SL plugin made for the new offical Northwood API. Gives server owners more useful commands.
 
+**WARNING!** The development of this plugin is no longer in an active state.
+Updates will still be rolled out with NWAPI updates.
+New features will not be added and only serious bugs will be fixed.
+
 # Installation
 
 ## Automatic
@@ -17,7 +21,7 @@ HARMFUL CODE. USE PLUGINS AND THE BUILT-IN PLUGIN MANAGER AT YOUR OWN RISK!**
 
 1. Download the `AdminTools.dll` from the [latest release](https://github.com/Axwabo/AdminTools-NWAPI/releases/latest)
 2. Put the DLL in your `plugins` folder (windows: `%appdata%/SCP Secret Laboratory/PluginAPI/plugins/<port>/`)
-3. Download **Harmony** (`Harmony.x.x.x.x.zip`) from [here](https://github.com/pardeike/Harmony/releases/latest/) 
+3. Download **Harmony** (`Harmony.x.x.x.x.zip`) from [here](https://github.com/pardeike/Harmony/releases/latest/)
 4. Put the Harmony DLL from the archive's `net4.8` directory in your `dependencies` folder (windows: `%appdata%/SCP Secret Laboratory/PluginAPI/plugins/<port>/dependencies`)
 5. Restart your server
 

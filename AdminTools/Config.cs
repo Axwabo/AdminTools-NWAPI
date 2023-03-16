@@ -32,5 +32,9 @@ namespace AdminTools
             new SerializableVector(161.1646f, 18.50996f, -12.87285f),
             new SerializableVector(107.5201f, 13.08837f, -13.64667f)
         };
+
+        [Description("Whether to spawn light sources at jail positions.")]
+        public bool JailLights { get; set; } = true;
+
     }
 }

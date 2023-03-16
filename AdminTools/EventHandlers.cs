@@ -1,5 +1,6 @@
 using AdminTools.Commands.Dummy;
 using AdminTools.Enums;
+using AdminToys;
 using Interactables.Interobjects.DoorUtils;
 using InventorySystem.Items.Firearms.Attachments;
 using MapGeneration;
@@ -323,7 +324,47 @@ namespace AdminTools
         }
 
         [PluginEvent(ServerEventType.RoundStart)]
-        public void OnRoundStart() => ClearRoundStartMutes();
+        public void OnRoundStart()
+        {
+            ClearRoundStartMutes();
+            if (!_pl.Config.JailLights)
+                return;
+            LightSourceToy toy = null;
+            foreach (GameObject value in NetworkClient.prefabs.Values)
+                if (value.TryGetComponent(out toy))
+                    break;
+            if (toy == null)
+            {
+                Log.Warning("Failed to find LightSourceToy prefab.");
+                return;
+            }
+            RoomIdentifier outside = RoomIdentifier.AllRoomIdentifiers.FirstOrDefault(e => e.Name == RoomName.Outside);
+            if (outside == null)
+                Log.Warning("Failed to find surface.");
+            else
+                CreateJailLights(toy, outside.transform.root);
+        }
+
+        private static void CreateJailLights(LightSourceToy toy, Transform root)
+        {
+            foreach (SerializableVector pos in _pl.Config.CustomJailPositions)
+                SpawnJailLight(toy, root.TransformPoint(pos + Vector3.up));
+
+            if (!PlayerRoleLoader.TryGetRoleTemplate(RoleTypeId.Tutorial, out FpcStandardRoleBase role) || !role.SpawnpointHandler.TryGetSpawnpoint(out Vector3 spawnPos, out _))
+                Log.Warning("Failed to find tutorial spawn position.");
+            else
+                SpawnJailLight(toy, spawnPos);
+        }
+
+        private static void SpawnJailLight(LightSourceToy template, Vector3 position)
+        {
+            LightSourceToy clone = Object.Instantiate(template, position, Quaternion.identity);
+            clone.NetworkPosition = position;
+            clone.NetworkLightIntensity = 0.5f;
+            clone.NetworkLightRange = 10f;
+            clone.NetworkLightShadows = false;
+            NetworkServer.Spawn(clone.gameObject);
+        }
 
         public static void ClearRoundStartMutes()
         {
@@ -364,7 +405,8 @@ namespace AdminTools
             catch (Exception e)
             {
                 Log.Error($"Round End:\n{e}");
-            } finally
+            }
+            finally
             {
                 // Update all the jails that it is no longer the current round, so when they are unjailed they don't teleport into the void.
                 ListExtensions.ForEach(Plugin.JailedPlayers, jail => jail.CurrentRound = false);
