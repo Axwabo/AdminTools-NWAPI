@@ -169,12 +169,6 @@ namespace AdminTools
 
                     return UniversalDamageTypeIDs.TryGetValue(translation, out int output) ? output : -1;
                 }
-                case ScpDamageHandler scpDamageHandler:
-                {
-                    RoleTypeId id = scpDamageHandler.Attacker.Role;
-
-                    return RoleDamageTypeIDs.TryGetValue(id, out int output) ? output : -1;
-                }
                 case Scp096DamageHandler scp096DamageHandler:
                 {
                     Scp096DamageHandler.AttackType id = scp096DamageHandler._attackType;
@@ -186,6 +180,12 @@ namespace AdminTools
                     Scp939DamageType id = scp939DamageHandler._damageType;
 
                     return Scp939DamageTypeIDs.TryGetValue(id, out int output) ? output : -1;
+                }
+                case ScpDamageHandler scpDamageHandler:
+                {
+                    RoleTypeId id = scpDamageHandler.Attacker.Role;
+
+                    return RoleDamageTypeIDs.TryGetValue(id, out int output) ? output : -1;
                 }
                 default:
                     return -1;
@@ -202,9 +202,9 @@ namespace AdminTools
             DisruptorDamageHandler handler => handler.Damage,
             FirearmDamageHandler firearmDamageHandler => firearmDamageHandler.Damage,
             UniversalDamageHandler universalDamageHandler => universalDamageHandler.Damage,
-            ScpDamageHandler scpDamageHandler => scpDamageHandler.Damage,
             Scp096DamageHandler scp096DamageHandler => scp096DamageHandler.Damage,
             Scp939DamageHandler scp939DamageHandler => scp939DamageHandler.Damage,
+            ScpDamageHandler scpDamageHandler => scpDamageHandler.Damage,
             _ => -1
         };
 
@@ -236,15 +236,15 @@ namespace AdminTools
                 case UniversalDamageHandler universalDamageHandler:
                     universalDamageHandler.Damage = amount;
                     return;
-                case ScpDamageHandler scpDamageHandler:
-                    scpDamageHandler.Damage = amount;
-                    return;
                 case Scp096DamageHandler scp096DamageHandler:
                     scp096DamageHandler.Damage = amount;
                     return;
                 case Scp939DamageHandler scp939DamageHandler:
                     scp939DamageHandler.Damage = amount;
                     break;
+                case ScpDamageHandler scpDamageHandler:
+                    scpDamageHandler.Damage = amount;
+                    return;
             }
         }
 
@@ -304,7 +304,7 @@ namespace AdminTools
             if (hidden)
                 player.ReferenceHub.characterClassManager.UserCode_CmdRequestHideTag();
             else
-                player.ReferenceHub.characterClassManager.UserCode_CmdRequestShowTag(false);
+                player.ReferenceHub.characterClassManager.UserCode_CmdRequestShowTag__Boolean(false);
 
         }
 
@@ -320,8 +320,12 @@ namespace AdminTools
 
         public static bool TryPryOpen(this DoorVariant door, Player player) => door is PryableDoor gate && gate.TryPryGate(player.ReferenceHub);
 
-        public static void SpawnActive(this ThrowableItem item, Vector3 position, float fuseTime = -1f,
-            Player owner = null)
+        public static void SpawnActive(
+            this ThrowableItem item,
+            Vector3 position,
+            float fuseTime = -1f,
+            Player owner = null
+        )
         {
             TimeGrenade grenade = (TimeGrenade) Object.Instantiate(item.Projectile, position, Quaternion.identity);
             if (fuseTime >= 0)

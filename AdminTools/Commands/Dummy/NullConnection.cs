@@ -9,6 +9,6 @@ namespace AdminTools.Commands.Dummy
 
         public override string address => "localhost";
 
-        public NullConnection(int networkConnectionId) : base(networkConnectionId, false, 0) { }
+        public NullConnection(int networkConnectionId) : base(networkConnectionId) { }
     }
 }
