@@ -123,7 +123,7 @@ namespace AdminTools.Commands.DropItem
         public static ItemPickupBase CreatePickup(Vector3 position, ItemBase prefab)
         {
             ItemPickupBase clone = UnityEngine.Object.Instantiate(prefab.PickupDropModel, position, Quaternion.identity);
-            clone.NetworkInfo = new PickupSyncInfo(prefab.ItemTypeId, position, Quaternion.identity, prefab.Weight);
+            clone.NetworkInfo = new PickupSyncInfo(prefab.ItemTypeId, prefab.Weight);
             clone.PreviousOwner = new Footprint(ReferenceHub.HostHub);
             return clone;
         }

@@ -34,9 +34,9 @@ namespace AdminTools
         public EventHandlers(Plugin plugin) => _pl = plugin;
 
         [PluginEvent(ServerEventType.PlayerInteractDoor)]
-        public void OnDoorOpen(AtPlayer player, DoorVariant door, bool canOpen)
+        public void OnDoorOpen(Player player, DoorVariant door, bool canOpen)
         {
-            if (player.PryGateEnabled)
+            if (Player.TryGet(player.ReferenceHub, out AtPlayer p) && p.PryGateEnabled)
                 door.TryPryOpen(player);
         }
 
@@ -97,9 +97,9 @@ namespace AdminTools
         }
 
         [PluginEvent(ServerEventType.PlayerChangeRole)]
-        public void OnRoleChange(AtPlayer player, PlayerRoleBase oldRole, RoleTypeId newRole, RoleChangeReason reason)
+        public void OnRoleChange(Player p, PlayerRoleBase oldRole, RoleTypeId newRole, RoleChangeReason reason)
         {
-            if (!_pl.Config.GodTuts)
+            if (!_pl.Config.GodTuts || !Player.TryGet(p.ReferenceHub, out AtPlayer player))
                 return;
             if (newRole == RoleTypeId.Tutorial)
             {
@@ -415,19 +415,17 @@ namespace AdminTools
         }
 
         [PluginEvent(ServerEventType.PlayerInteractDoor)]
-        public void OnPlayerInteractingDoor(AtPlayer player, DoorVariant door, bool canOpen)
+        public void OnPlayerInteractingDoor(Player p, DoorVariant door, bool canOpen)
         {
-            if (player.BreakDoorsEnabled)
+            if (Player.TryGet(p.ReferenceHub, out AtPlayer player) && player.BreakDoorsEnabled)
                 door.BreakDoor();
         }
 
         [PluginEvent(ServerEventType.PlayerDamage)]
-        public void OnPlayerDamage(Player target, AtPlayer attacker, DamageHandlerBase handler)
+        public void OnPlayerDamage(Player target, Player a, DamageHandlerBase handler)
         {
-            if (attacker is { InstantKillEnabled: true })
-            {
+            if (a != null && Player.TryGet(a.ReferenceHub, out AtPlayer attacker) && attacker.InstantKillEnabled)
                 handler.SetAmount(-1);
-            }
         }
     }
 }

@@ -48,7 +48,7 @@
             <HintPath>$(NW-ASSEMBLIES)\CommandSystem.Core.dll</HintPath>
         </Reference>
         <Reference Include="Mirror">
-            <HintPath>..\..\assemblies\Mirror.dll</HintPath>
+            <HintPath>$(NW-ASSEMBLIES)\Mirror.dll</HintPath>
         </Reference>
         <Reference Include="Mirror.Components">
             <HintPath>$(NW-ASSEMBLIES)\Mirror.Components.dll</HintPath>
@@ -56,8 +56,8 @@
         <Reference Include="NorthwoodLib">
             <HintPath>$(NW-ASSEMBLIES)\NorthwoodLib.dll</HintPath>
         </Reference>
-        <Reference Include="PluginAPI, Version=12.0.0.0, Culture=neutral, processorArchitecture=Amd64">
-            <HintPath>..\packages\Northwood.PluginAPI.12.0.0\lib\net48\PluginAPI.dll</HintPath>
+        <Reference Include="PluginAPI">
+            <HintPath>$(NW-ASSEMBLIES)\PluginAPI.dll</HintPath>
         </Reference>
         <Reference Include="Pooling">
             <HintPath>$(NW-ASSEMBLIES)\Pooling.dll</HintPath>

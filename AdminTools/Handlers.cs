@@ -330,10 +330,10 @@ namespace AdminTools
             TimeGrenade grenade = (TimeGrenade) Object.Instantiate(item.Projectile, position, Quaternion.identity);
             if (fuseTime >= 0)
                 grenade._fuseTime = fuseTime;
-            grenade.NetworkInfo = new PickupSyncInfo(item.ItemTypeId, position, Quaternion.identity, item.Weight, item.ItemSerial);
+            grenade.NetworkInfo = new PickupSyncInfo(item.ItemTypeId, item.Weight, item.ItemSerial);
             grenade.PreviousOwner = new Footprint(owner != null ? owner.ReferenceHub : ReferenceHub.HostHub);
             if (grenade is Scp018Projectile scp018)
-                scp018.RigidBody.velocity = new Vector3(Random.value, Random.value, Random.value); // add some force to make the ball bounce
+                scp018.GetComponent<Rigidbody>().velocity = new Vector3(Random.value, Random.value, Random.value); // add some force to make the ball bounce
             NetworkServer.Spawn(grenade.gameObject);
             grenade.ServerActivate();
         }
