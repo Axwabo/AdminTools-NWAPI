@@ -33,6 +33,6 @@ namespace AdminTools.Commands.Tags
             response = "All staff tags are now visible";
             return true;
         }
-        private static bool HasHiddenBadge(Player player) => player.ReferenceHub.serverRoles.RemoteAdmin && !player.ReferenceHub.serverRoles.RaEverywhere && player.IsBadgeHidden();
+        private static bool HasHiddenBadge(Player player) => player.ReferenceHub.serverRoles.RemoteAdmin && !player.ReferenceHub.authManager.RemoteAdminGlobalAccess && player.IsBadgeHidden();
     }
 }

@@ -302,9 +302,9 @@ namespace AdminTools
         public static void SetBadgeVisibility(this Player player, bool hidden)
         {
             if (hidden)
-                player.ReferenceHub.characterClassManager.UserCode_CmdRequestHideTag();
+                player.ReferenceHub.serverRoles.TryHideTag();
             else
-                player.ReferenceHub.characterClassManager.UserCode_CmdRequestShowTag__Boolean(false);
+                player.ReferenceHub.serverRoles.RefreshLocalTag();
 
         }
 

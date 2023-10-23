@@ -99,7 +99,7 @@ namespace AdminTools
         [PluginEvent(ServerEventType.PlayerChangeRole)]
         public void OnRoleChange(Player p, PlayerRoleBase oldRole, RoleTypeId newRole, RoleChangeReason reason)
         {
-            if (!_pl.Config.GodTuts || !Player.TryGet(p.ReferenceHub, out AtPlayer player))
+            if (!p.ReferenceHub || !_pl.Config.GodTuts || !Player.TryGet(p.ReferenceHub, out AtPlayer player))
                 return;
             if (newRole == RoleTypeId.Tutorial)
             {

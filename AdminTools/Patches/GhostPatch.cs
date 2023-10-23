@@ -17,17 +17,13 @@ namespace AdminTools.Patches
             int index = list.FindIndex(i => i.operand is MethodInfo { Name: nameof(VisibilityController.ValidateVisibility) }) + 6;
             list.InsertRange(index, new[]
             {
-                new(OpCodes.Ldarg_0),
-                new(OpCodes.Ldloc, 5),
-                new(OpCodes.Ldloc, 7),
-                CodeInstruction.Call(typeof(GhostPatch), nameof(OverrideVisibility)),
-                new(OpCodes.Stloc, 7)
+                new(OpCodes.Ldarg_0), new(OpCodes.Ldloc, 5), new(OpCodes.Ldloc, 7), CodeInstruction.Call(typeof(GhostPatch), nameof(OverrideVisibility)), new(OpCodes.Stloc, 7)
             });
             return list;
         }
         public static bool OverrideVisibility(ReferenceHub receiver, ReferenceHub target, bool isInvisible)
             => isInvisible
                 || target.TryGetComponent(out GhostController controller)
-                && (controller.IsFullyInvisible || controller.InvisibleTo.Contains(receiver.characterClassManager.UserId));
+                && (controller.IsFullyInvisible || controller.InvisibleTo.Contains(receiver.authManager.UserId));
     }
 }
