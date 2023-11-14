@@ -1,6 +1,7 @@
 ﻿using CommandSystem;
 using MEC;
 using PlayerRoles;
+using PlayerRoles.Ragdolls;
 using PluginAPI.Core;
 using System;
 using System.Linq;

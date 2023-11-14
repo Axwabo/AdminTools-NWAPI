@@ -9,6 +9,7 @@ using Mirror;
 using NorthwoodLib.Pools;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
+using PlayerRoles.Ragdolls;
 using PlayerStatsSystem;
 using PluginAPI.Core;
 using PluginAPI.Core.Attributes;
