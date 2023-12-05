@@ -16,5 +16,7 @@ namespace AdminTools
         public Dictionary<AmmoType, ushort> Ammo;
         public bool CurrentRound;
         public bool GodMode;
+
+        public int Scp079Exp;
     }
 }
