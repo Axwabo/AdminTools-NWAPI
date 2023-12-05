@@ -4,3 +4,5 @@ packages/
 GitHubUpdates/
 .git/
 AdminTools.sln.DotSettings.user
+/.vs/AdminTools
+/AdminTools/AdminTools.csproj
