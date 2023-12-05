@@ -34,48 +34,45 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="0Harmony, Version=2.2.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Lib.Harmony.2.2.2\lib\net48\0Harmony.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp-firstpass-Publicized">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Assembly-CSharp-firstpass-Publicized.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp-Publicized">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Assembly-CSharp-Publicized.dll</HintPath>
-    </Reference>
-    <Reference Include="CommandSystem.Core">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\CommandSystem.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Mirror-Publicized">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Mirror-Publicized.dll</HintPath>
-    </Reference>
-    <Reference Include="Mirror.Components">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Mirror.Components.dll</HintPath>
-    </Reference>
-    <Reference Include="NorthwoodLib">
-      <HintPath>..\..\..\..\Downloads\NorthwoodLib-netstandard2.1(1)\NorthwoodLib.dll</HintPath>
-    </Reference>
-    <Reference Include="PluginAPI, Version=13.1.1.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\Northwood.PluginAPI.13.1.1\lib\net48\PluginAPI.dll</HintPath>
-    </Reference>
-    <Reference Include="Pooling">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Pooling.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.PhysicsModule">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
-    </Reference>
-    <Reference Include="YamlDotNet, Version=11.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
-      <HintPath>..\packages\YamlDotNet.11.0.1\lib\net45\YamlDotNet.dll</HintPath>
-    </Reference>
-  </ItemGroup>
+<ItemGroup>
+        <Reference Include="0Harmony, Version=2.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+            <HintPath>..\packages\Lib.Harmony.2.2.2\lib\net48\0Harmony.dll</HintPath>
+        </Reference>
+        <Reference Include="Assembly-CSharp">
+            <HintPath>$(NW-ASSEMBLIES)\Assembly-CSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="Assembly-CSharp-firstpass">
+            <HintPath>$(NW-ASSEMBLIES)\Assembly-CSharp-firstpass.dll</HintPath>
+        </Reference>
+        <Reference Include="CommandSystem.Core">
+            <HintPath>$(NW-ASSEMBLIES)\CommandSystem.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="Mirror">
+            <HintPath>$(NW-ASSEMBLIES)\Mirror.dll</HintPath>
+        </Reference>
+        <Reference Include="Mirror.Components">
+            <HintPath>$(NW-ASSEMBLIES)\Mirror.Components.dll</HintPath>
+        </Reference>
+        <Reference Include="NorthwoodLib">
+            <HintPath>$(NW-ASSEMBLIES)\NorthwoodLib.dll</HintPath>
+        </Reference>
+        <Reference Include="PluginAPI">
+            <HintPath>$(NW-ASSEMBLIES)\PluginAPI.dll</HintPath>
+        </Reference>
+        <Reference Include="Pooling">
+            <HintPath>$(NW-ASSEMBLIES)\Pooling.dll</HintPath>
+        </Reference>
+        <Reference Include="System"/>
+        <Reference Include="UnityEngine">
+            <HintPath>$(NW-ASSEMBLIES)\UnityEngine.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+            <HintPath>$(NW-ASSEMBLIES)\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.PhysicsModule">
+            <HintPath>$(NW-ASSEMBLIES)\UnityEngine.PhysicsModule.dll</HintPath>
+        </Reference>
+    </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminToolsPlayerFactory.cs" />
     <Compile Include="AtPlayer.cs" />
