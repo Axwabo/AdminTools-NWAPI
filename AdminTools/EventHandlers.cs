@@ -9,6 +9,7 @@ using Mirror;
 using NorthwoodLib.Pools;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
+using PlayerRoles.PlayableScps.Scp079;
 using PlayerRoles.Ragdolls;
 using PlayerStatsSystem;
 using PluginAPI.Core;
@@ -200,6 +201,7 @@ namespace AdminTools
         {
             Dictionary<AmmoType, ushort> ammo = player.Ammo();
             List<ItemType> items = player.ReferenceHub.inventory.UserInventory.Items.Select(x => x.Value.ItemTypeId).ToList();
+
             if (!skipAdd)
             {
                 Plugin.JailedPlayers.Add(new Jailed
@@ -211,8 +213,10 @@ namespace AdminTools
                     UserId = player.UserId,
                     CurrentRound = true,
                     Ammo = ammo,
-                    GodMode = player.IsGodModeEnabled
+                    GodMode = player.IsGodModeEnabled,
+                    Scp079Exp = ((player.RoleBase as Scp079Role)?.SubroutineModule.TryGetSubroutine<Scp079TierManager>(out Scp079TierManager tiermanager) == true) ? tiermanager.TotalExp : 0
                 });
+
             }
 
             yield return Timing.WaitForSeconds(0.2f);
@@ -256,6 +260,16 @@ namespace AdminTools
                     player.ResetInventory(jail.Items);
                     foreach (KeyValuePair<AmmoType, ushort> kvp in jail.Ammo ?? new Dictionary<AmmoType, ushort>())
                         player.AddAmmo(kvp.Key.GetItemType(), kvp.Value);
+
+                    try
+                    {
+                        if (player.RoleBase is Scp079Role && (player.RoleBase as Scp079Role).SubroutineModule.TryGetSubroutine<Scp079TierManager>(out Scp079TierManager tiermanager))
+                            tiermanager.TotalExp = jail.Scp079Exp;
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error($"{nameof(DoUnJail)}: {e}");
+                    }
                 }
                 catch (Exception e)
                 {
