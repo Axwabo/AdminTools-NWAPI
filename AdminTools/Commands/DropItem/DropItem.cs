@@ -7,6 +7,7 @@ using Mirror;
 using PluginAPI.Core;
 using System;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace AdminTools.Commands.DropItem
 {
@@ -122,9 +123,9 @@ namespace AdminTools.Commands.DropItem
 
         public static ItemPickupBase CreatePickup(Vector3 position, ItemBase prefab)
         {
-            ItemPickupBase clone = UnityEngine.Object.Instantiate(prefab.PickupDropModel, position, Quaternion.identity);
+            ItemPickupBase clone = Object.Instantiate(prefab.PickupDropModel, position, Quaternion.identity);
             clone.NetworkInfo = new PickupSyncInfo(prefab.ItemTypeId, prefab.Weight);
-            clone.PreviousOwner = new Footprint(ReferenceHub.HostHub);
+            clone.PreviousOwner = new Footprint(ReferenceHub._hostHub);
             return clone;
         }
     }

@@ -4,8 +4,6 @@ using Interactables.Interobjects;
 using Interactables.Interobjects.DoorUtils;
 using InventorySystem;
 using InventorySystem.Items;
-using InventorySystem.Items.Firearms;
-using InventorySystem.Items.Firearms.Attachments;
 using InventorySystem.Items.Pickups;
 using InventorySystem.Items.ThrowableProjectiles;
 using Mirror;
@@ -331,7 +329,7 @@ namespace AdminTools
             if (fuseTime >= 0)
                 grenade._fuseTime = fuseTime;
             grenade.NetworkInfo = new PickupSyncInfo(item.ItemTypeId, item.Weight, item.ItemSerial);
-            grenade.PreviousOwner = new Footprint(owner != null ? owner.ReferenceHub : ReferenceHub.HostHub);
+            grenade.PreviousOwner = new Footprint(owner != null ? owner.ReferenceHub : ReferenceHub._hostHub);
             if (grenade is Scp018Projectile scp018)
                 scp018.GetComponent<Rigidbody>().velocity = new Vector3(Random.value, Random.value, Random.value); // add some force to make the ball bounce
             NetworkServer.Spawn(grenade.gameObject);
@@ -397,24 +395,6 @@ namespace AdminTools
             inv.SendAmmoNextFrame = true;
         }
 
-        public static ItemBase AddItem(this Player player, ItemType itemType)
-        {
-            ItemBase item = player.ReferenceHub.inventory.ServerAddItem(itemType);
-            if (item is not Firearm firearm)
-                return item;
-
-            if (AttachmentsServerHandler.PlayerPreferences[player.ReferenceHub].TryGetValue(itemType, out uint attachments))
-            {
-                firearm.ApplyAttachmentsCode(attachments, true);
-            }
-
-            FirearmStatusFlags flags = FirearmStatusFlags.MagazineInserted;
-            if (firearm.Attachments.Any(a => a.Name == AttachmentName.Flashlight))
-                flags |= FirearmStatusFlags.FlashlightEnabled;
-            firearm.Status = new FirearmStatus(firearm.AmmoManagerModule.MaxAmmo, flags, firearm.GetCurrentAttachmentsCode());
-            return item;
-        }
-
         public static void ResetInventory(this Player player, List<ItemType> items)
         {
             player.ClearInventory();
@@ -436,7 +416,7 @@ namespace AdminTools
 
         }
 
-        public static ThrowableItem CreateThrowable(ItemType type, Player player = null) => (player != null ? player.ReferenceHub : ReferenceHub.HostHub)
+        public static ThrowableItem CreateThrowable(ItemType type, Player player = null) => (player != null ? player.ReferenceHub : ReferenceHub._hostHub)
             .inventory.CreateItemInstance(new ItemIdentifier(type, ItemSerialGenerator.GenerateNext()), false) as ThrowableItem;
 
         public static ReadOnlyCollection<ItemPickupBase> GetPickups() => Object.FindObjectsOfType<ItemPickupBase>().ToList().AsReadOnly();

@@ -272,7 +272,7 @@ namespace AdminTools
         {
             Vector3 pos = player.Position;
             return !WaypointBase.TryGetWaypoint(new RelativePosition(pos).WaypointId, out WaypointBase waypoint)
-                || waypoint is not ElevatorWaypoint { _elevator._lastDestination: { } dest }
+                || waypoint is not ElevatorWaypoint { _elevator.DestinationDoor: { } dest }
                     ? pos
                     : dest.transform.TransformPoint(Vector3.forward) + Vector3.up;
         }
@@ -363,7 +363,7 @@ namespace AdminTools
             clone.NetworkPosition = position;
             clone.NetworkLightIntensity = 0.5f;
             clone.NetworkLightRange = 10f;
-            clone.NetworkLightShadows = false;
+            clone.NetworkShadowType = LightShadows.None;
             NetworkServer.Spawn(clone.gameObject);
         }
 

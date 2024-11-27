@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using Console = GameCore.Console;
 
 namespace AdminTools
 {
@@ -18,7 +19,7 @@ namespace AdminTools
     {
         public const string Author = "Galaxy119, Neil, Axwabo";
         public const string Name = "Admin Tools";
-        public const string Version = "2.4.6";
+        public const string Version = "2.4.7";
 
         public EventHandlers EventHandlers;
 
@@ -68,7 +69,7 @@ namespace AdminTools
                 return;
             _jail = new Jail();
             CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(_jail);
-            GameCore.Console.singleton.ConsoleCommandHandler.RegisterCommand(_jail);
+            Console.singleton.ConsoleCommandHandler.RegisterCommand(_jail);
         }
 
         [PluginUnload]
@@ -80,7 +81,7 @@ namespace AdminTools
             if (_jail == null)
                 return;
             CommandProcessor.RemoteAdminCommandHandler.UnregisterCommand(_jail);
-            GameCore.Console.singleton.ConsoleCommandHandler.RegisterCommand(_jail);
+            Console.singleton.ConsoleCommandHandler.RegisterCommand(_jail);
         }
 
     }
