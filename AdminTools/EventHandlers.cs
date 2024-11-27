@@ -1,4 +1,3 @@
-using AdminTools.Commands.Dummy;
 using AdminTools.Enums;
 using AdminToys;
 using Interactables.Interobjects.DoorUtils;
@@ -6,6 +5,7 @@ using InventorySystem.Items.Firearms.Attachments;
 using MapGeneration;
 using MEC;
 using Mirror;
+using NetworkManagerUtils;
 using NorthwoodLib.Pools;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
@@ -23,6 +23,7 @@ using System.Text;
 using UnityEngine;
 using Utils.NonAllocLINQ;
 using VoiceChat;
+using Log = PluginAPI.Core.Log;
 using Object = UnityEngine.Object;
 
 namespace AdminTools
@@ -59,8 +60,9 @@ namespace AdminTools
             dummyIndex = 0;
             GameObject clone = Object.Instantiate(NetworkManager.singleton.playerPrefab);
             ReferenceHub hub = clone.GetComponent<ReferenceHub>();
-            NetworkServer.AddPlayerForConnection(new NullConnection(hub.PlayerId), clone);
+            NetworkServer.AddPlayerForConnection(new DummyNetworkConnection(), clone);
             CharacterClassManager ccm = hub.characterClassManager;
+            ccm.Start();
             ccm.GodMode = true;
             hub.roleManager.ServerSetRole(role, RoleChangeReason.RemoteAdmin);
             hub.nicknameSync.Network_myNickSync = "Dummy";
