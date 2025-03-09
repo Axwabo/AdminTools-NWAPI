@@ -2,16 +2,13 @@
 
 A port of EXILED's SCP:SL plugin made for the new offical Northwood API. Gives server owners more useful commands.
 
-**WARNING!** The development of this plugin is no longer in an active state.
-Updates will still be rolled out with NWAPI updates.
-New features will not be added and only serious bugs will be fixed.
+> [!WARNING]
+> This plugin will soon be out of support as NWAPI is approaching end-of-life.
+> A rewritten version for LabAPI is being worked on, it will be linked here once it's released.
 
 # Installation
 
 ## Automatic
-
-**CAUTION: USING THE PLUGIN MANAGER BUT EVEN INSTALLING ANY PLUGIN CAN BREAK THE SERVER AND MAY POTENTIALLY CONTAIN
-HARMFUL CODE. USE PLUGINS AND THE BUILT-IN PLUGIN MANAGER AT YOUR OWN RISK!**
 
 1. Enable the plugin manager in the server console (run `p` then `p confirm`)
 2. Run `p install Axwabo/AdminTools-NWAPI` in the server console
