@@ -3,8 +3,8 @@
 A port of EXILED's SCP:SL plugin made for the new offical Northwood API. Gives server owners more useful commands.
 
 > [!WARNING]
-> This plugin will soon be out of support as NWAPI is approaching end-of-life.
-> A rewritten version for LabAPI is being worked on, it will be linked here once it's released.
+> This plugin is no longer supported.
+> Use [ModeratorTools](https://github.com/Axwabo/ModeratorTools/) which is built for LabAPI.
 
 # Installation
 
